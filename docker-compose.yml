@@ -11,11 +11,10 @@ x-cache-from:
 services:
 
   db:
-    image: postgres:9.6-alpine
+    image: postgres:13.1
     environment:
-      - POSTGRES_DB=db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=pwd
+      - POSTGRES_DB=swapit
+      - POSTGRES_PASSWORD=password
     volumes:
       - db-data:/var/lib/postgresql/data:rw
     ports:
