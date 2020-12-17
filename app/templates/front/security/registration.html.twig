@@ -1,11 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_back.html.twig' %}
 
-    {% block body%}
-    <div class="form-group">
+    {% block body %}
         <h1>Inscription</h1>
         {{ form_start(form) }}
         {{ form_widget(form) }}
+        <br/>   
         <button type="submit" class="btn btn-primary">Inscription</button>
         {{ form_end(form) }}
-    </div>
     {% endblock %}

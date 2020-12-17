@@ -19,7 +19,6 @@ class SecurityController extends abstractController
         $user = new User();
 
         $form = $this->createForm(RegistrationType::class, $user);
-
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
@@ -27,7 +26,7 @@ class SecurityController extends abstractController
             $manager->flush();
         }
 
-        return $this->render('security/registration.html.twig', [
+        return $this->render('front/security/registration.html.twig', [
             'form' => $form->createView()
         ]);
     }
