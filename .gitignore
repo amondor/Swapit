@@ -41,8 +41,8 @@ app/public/upload/
 /app/build/
 
 # NPM & Yarn
-/app/node_modules/
-/app/public/build/
+/app/node_modules
+/app/public/build
 
 # Composer PHAR
 /app/composer.phar
