@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello GameController!{% endblock %}
+
+{% block body %}
+    <h1>Mes jeux</h1>
+    <a href="{{ path('game_new') }}" class="btn">Créer un jeu</a> <br><br>
+
+    {% for game in games %}
+        Titre : {{ game.title|capitalize }} <br>
+        <a href="{{ path('game_show', {'id': game.id}) }}" class="btn">Voir</a>
+        <a href="{{ path('game_edit', {'id': game.id}) }}" class="btn">Editer</a>
+        <a href="{{ path('game_delete', {'id': game.id, 'token': csrf_token('delete_game' ~ game.id)}) }}" class="btn red">Supprimer</a>
+        <br><br>
+    {% endfor %}
+{% endblock %}
