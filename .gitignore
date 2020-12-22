@@ -58,3 +58,4 @@ app/public/upload/
 .idea
 dump*.sql
 /db-data
+db_data
