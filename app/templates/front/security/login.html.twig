@@ -1,17 +1,20 @@
 {% extends 'base_front.html.twig' %}
 
 {% block body %}
+<title>Connexion</title>
 
 <h1>Se connecter</h1>
 
 <form action="{{ path('login') }}" method="post">
-    <div class="form-group">
-        <input placeholder="Adresse mail" required name="_username" type="text" class="form-control">
+    <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input placeholder="Adresse mail" required name="_username" type="text" id="email" class="form-control">
     </div>
-    <div class="form-group">
-        <input placeholder="password" required name="_password" type="password" class="form-control">
+    <div class="mb-3">
+        <label for="password" class="form-label">Mot de passe</label>
+        <input placeholder="password" required name="_password" type="password" id="password" class="form-control">
     </div>
-    <div class="form-group">
+    <div class="mb-3">
         <button type="submit" class="btn btn-success">Connexion</button>
     </div>
 {% endblock %}

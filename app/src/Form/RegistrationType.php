@@ -18,13 +18,15 @@ class RegistrationType extends AbstractType
             ->add('email', TextType::class, [
                 'label' => 'Email',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'placeholder' => 'Adresse email'
                 ]
             ])
             ->add('username', TextType::class, [
                 'label' => 'nom',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'placeholder' => 'Nom d\'utilisateur'
                 ]
             ])
             ->add('password', RepeatedType::class, [
@@ -34,13 +36,15 @@ class RegistrationType extends AbstractType
                 'first_options' => [
                     'label' => 'mot de passe',
                     'attr' => [
-                        'class' => 'form-control'
+                        'class' => 'form-control',
+                        'placeholder' => 'mot de passe'
                     ]
                 ],
                 'second_options' => [
-                    'label' => 'confirmer mot de passe',
+                    'label' => 'Confirmer mot de passe',
                     'attr' => [
-                        'class' => 'form-control'
+                        'class' => 'form-control',
+                        'placeholder' => 'Confirmer mot de passe'
                     ]
             ],
             ])
