@@ -4,6 +4,10 @@ namespace App\Services;
 
 use Exception;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+
+use Symfony\Component\Serializer\Serializer;
 
 class Igdb {
 
@@ -11,6 +15,10 @@ class Igdb {
     protected $httpClient;
     private $client;
 
+
+    // private $normalizer = new ObjectNormalizer($classMetadataFactory);
+    // private $serializer = new Serializer([$normalizer]);
+   
     public function __construct($client ,Twitch $twitch, HttpClientInterface $httpClient) {
        
         $this->client = array_pop($client);
@@ -23,19 +31,59 @@ class Igdb {
         $this->httpClient =  $httpClient;
     }
 
-    public function getGames() { 
-        $response =$this->httpClient->request('POST','https://api.igdb.com/v4/games',
-                                        [
-                                        'headers' => 
-                                            ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
-                                        'body' => 'fields name, first_release_date, category, status, storyline, summary, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows	;'
-                                        ]
-                                    )->toArray();
+    public function initCron() {
+
+        $datas = $this->getGames();
+
+        foreach($datas as $data)
+        {
+            $game = $this->serializer->deserialize($data, Person::class, 'array');
+        }
+        
+    }
+    
+    public function getGames() {
+
+        $response = [];
+
+         for ($i=0; $i < ($this->countGames()/500); $i++) { 
+            
+             $offset = ($i == 0)? 1 : $i*500;
+             $response = array_merge($response,$this->getGamesList($offset,500));
+        
+        }
+        return $response ;
+    }
+
+    public function getGamesList($offset, $limit) {
+
+       
+            $response = $this->httpClient->request('POST','https://api.igdb.com/v4/games',
+                                            [
+                                            'headers' => 
+                                                ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
+                                            'body' => 'fields name, first_release_date, status, storyline, summary, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows;
+                                                       limit 500;'."$limit;".'
+                                                       offset '."$offset;"
+                                            ]
+                                        )->toArray();
         return $response; 
     }
 
+    public function countGames() {
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/games/count',
+        [
+        'headers' => 
+            ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
+        ]
+    )->toArray();
+    
+    return $response['count']; 
+    }
+
+
     public function getGame($id) { 
-        $response =$this->httpClient->request('POST','https://api.igdb.com/v4/games',
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/games',
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
@@ -47,7 +95,7 @@ class Igdb {
     }
 
     public function getGenres() { 
-        $response =$this->httpClient->request('POST','https://api.igdb.com/v4/genres',
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/genres',
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
@@ -58,7 +106,7 @@ class Igdb {
     }
     
     public function getCharacters() { 
-        $response =$this->httpClient->request('POST','https://api.igdb.com/v4/characters',
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/characters',
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
@@ -69,7 +117,7 @@ class Igdb {
     }
 
     public function getGameCharacters($id) { 
-        $response =$this->httpClient->request('POST','https://api.igdb.com/v4/characters',
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/characters',
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
@@ -81,7 +129,7 @@ class Igdb {
     }
 
     public function getCharacter_mug_shots($id) { 
-        $response =$this->httpClient->request('POST','https://api.igdb.com/v4/characters',
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/characters',
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
@@ -93,7 +141,7 @@ class Igdb {
     }
 
     public function getCompanies() { 
-        $response =$this->httpClient->request('POST','https://api.igdb.com/v4/characters',
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/characters',
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
@@ -104,7 +152,7 @@ class Igdb {
     }
 
     public function getCompanie($id) { 
-        $response =$this->httpClient->request('POST','https://api.igdb.com/v4/characters',
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/characters',
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
@@ -115,8 +163,8 @@ class Igdb {
         return $response;
     }
 
-    public function searchGame($search){ 
-        $response =$this->httpClient->request('POST','https://api.igdb.com/v4/games',
+    public function searchGame($search) { 
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/games',
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
@@ -128,8 +176,8 @@ class Igdb {
     }
 
 
-    public function getGameCovers($id){ 
-        $response =$this->httpClient->request('POST','https://api.igdb.com/v4/covers',
+    public function getGameCovers($id) { 
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/covers',
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
@@ -141,8 +189,8 @@ class Igdb {
         return $response;
     }
 
-    public function getModes(){ 
-        $response =$this->httpClient->request('POST','https://api.igdb.com/v4/game_modes',
+    public function getModes() { 
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/game_modes',
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
@@ -152,8 +200,8 @@ class Igdb {
         return $response;
     }
 
-    public function getThemes(){ 
-        $response =$this->httpClient->request('POST','https://api.igdb.com/v4/themes',
+    public function getThemes() { 
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/themes',
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
@@ -164,7 +212,7 @@ class Igdb {
     }
 
     public function getGameVideos($id) { 
-        $response =$this->httpClient->request('POST','https://api.igdb.com/v4/game_videos',
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/game_videos',
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
@@ -174,5 +222,5 @@ class Igdb {
                                         ]
                                     )->toArray(); 
         return $response;
-    }
+    } 
 }

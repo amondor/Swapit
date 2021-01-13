@@ -20,7 +20,7 @@ class RequestController extends AbstractController
      */
     public function authAccess(Igdb $Igdb)
     {
-        dd($Igdb->searchGame('Halo'));
+        dd($Igdb->getGames());
        
         return $this->render('request/index.html.twig', [
             'controller_name' => 'RequestController',
