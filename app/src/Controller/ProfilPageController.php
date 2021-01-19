@@ -12,6 +12,8 @@ class ProfilPageController extends AbstractController
      */
     public function index()
     {
+
+    
         return $this->render('profil_page/index.html.twig', [
             'controller_name' => 'ProfilPageController',
         ]);
