@@ -1,29 +1,64 @@
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+<nav class="navbar navbar-expand-lg   static-to ">
   <div class="container">
     <a class="navbar-brand" href="#">
-          <img src="http://placehold.it/150x50?text=Logo" alt="">
-        </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav ml-auto">
+      <img src="https://i.ibb.co/Jptwgbf/logo.png" alt="" width="70" height="50">
+    </a>
+    <a class="navbar-brand" href="#">
+      <img src="https://i.ibb.co/QDjHSyx/Swap-it-text-logo.png" alt="" width="110" height="40">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+      aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarResponsive">
+      <ul class="navbar-nav navbar-right">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Home
-                <span class="sr-only">(current)</span>
-              </a>
+          <a class="nav-link" href="#">Accueil
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
+          <a class="nav-link" href="#">A propos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Services</a>
+          <a class="nav-link" href="#">Avis </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{path("games")}}">Jeux</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Contact</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Inscription</a>
+        </li>
+        <li class="nav-item my-auto ">
+          <a name="" id="" class="btn " href="#" role="button">Connexion</a>
+        </li>
+
       </ul>
     </div>
   </div>
 </nav>
+
+<style>
+  nav {
+    background: #93BFD0;
+  }
+
+  nav a {
+    font-weight: bold;
+    font-size: 25px;
+    line-height: 30px;
+    color: #29647C;
+  }
+
+  .btn {
+    background: #FF5D19;
+    font-size: 25px;
+    ine-height: 30px;
+    border-radius: 10px !important;
+    color: #ffffff;
+
+  }
+</style>

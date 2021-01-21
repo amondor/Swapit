@@ -1,9 +1,17 @@
-{% extends 'base_front.html.twig' %}
+{% extends "base.html.twig" %}
 
-{% block title %}Bienvenue sur Swap'It !{% endblock %}
+{% block title %}Home{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+{% block navbar %} 
+    {% include '_components/navbar_landing.twig'%} 
+{% endblock %}
 
 
-
-{% block body %}
+{% block content %}
     {% include '_components/landing-intro.twig'%}
 {% endblock %}
