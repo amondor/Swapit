@@ -1,0 +1,125 @@
+{% extends 'base_front.html.twig' %}
+
+
+{% block body %}
+
+<title>Proposer un swap</title>
+
+<style>
+    body {background-color: #ECECEC; }
+    .box{
+        border-radius: 10px;
+        background-color: white;   
+    } 
+    .left-box{ 
+        width: 45%;
+        height: 540px; 
+    } 
+    .right-box{ 
+        width: 45%;
+        margin-left: 35px;
+        height: 540px;
+    } 
+    .element-list{
+        height: 80px;
+        width: 550px;
+        border-radius: 5px;
+        background-color: #FF5D19;
+        opacity: 0.33;
+        margin-top: 25px;
+    }
+    .font-style{
+        font-size: 24px;
+        margin-left: 15px;
+        color: #29647C;
+    }
+    .font-style-title{
+        font-size: 28px;
+        margin-left: 15px;
+        color: #FF5D19;
+        font-weight: 700;
+    }
+    .text-wrap{
+        width: 66%;
+        margin-top: 2%;
+    }
+    .vector-wrap{
+        width: 30%;
+        text-align: center;
+    }
+    .wrapper-header{
+        display: flex;
+        align-items: center;
+        margin-top: 2%;
+    }
+    .list-elements-container{
+        display: flex;
+        justify-content: center;
+        margin-top: 5%;
+        flex-wrap: wrap;
+    }
+    .text-wrap-title{
+        width: 1200px;
+    }
+    .owned-color{
+        background-color: #D4E0E5;
+    }
+    ]
+</style>
+
+
+<div class="container" style="display: flex; margin-top: 25px; flex-wrap: wrap; justify-content: center;">
+    <div class="text-wrap-title">
+        <p class="font-style-title">Proposer un Swap à Pseudo</p>
+    </div>
+    <div class="box left-box">
+        <div class="wrapper-header">
+            <div class="text-wrap">
+                <p class="font-style">Jeux possédés par Pseudo</p>
+            </div>
+            <div class="vector-wrap">
+                <img style="width: 60px;" src="https://i.ibb.co/QPnXBTj/check.png"></img>
+            </div>
+        </div>
+        <div class="list-elements-container">
+            <div class="element-list owned-color">
+                <p>assassins creed</p>
+            </div>
+            <div class="element-list owned-color">
+                <p>assassins creed</p>
+            </div>
+            <div class="element-list owned-color">
+                <p>assassins creed</p>
+            </div>
+            <div class="element-list owned-color">
+                <p>assassins creed</p>
+            </div>
+        </div>
+    </div> 
+    <div class="box right-box"> 
+        <div class="wrapper-header">
+            <div class="text-wrap">
+                <p class="font-style">Les jeux que tu souhaites</p>
+            </div>
+            <div class="vector-wrap">
+                <img style="width: 60px;" src="https://i.ibb.co/Zxv6Jhd/favorite.png"></img>
+            </div>
+        </div>
+        <div class="list-elements-container">
+            <div class="element-list">
+                <p>assassins creed</p>
+            </div>
+            <div class="element-list">
+                <p>assassins creed</p>
+            </div>
+            <div class="element-list">
+                <p>assassins creed</p>
+            </div>
+            <div class="element-list">
+                <p>assassins creed</p>
+            </div>
+        </div>
+    </div> 
+</div>
+
+{% endblock %}

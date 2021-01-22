@@ -51,6 +51,9 @@
                     </li>
                 {% else %}
                     <li class="nav-item">
+                        <a class="nav-link" href="{{path("user_profile")}}"><img style="width:25px; height:25px" src="https://i.ibb.co/pvxsxkc/user.png"></img></a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{path("logout")}}">Déconnexion</a>
                     </li>
                 {% endif %}
