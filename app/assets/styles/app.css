@@ -1,3 +1,17 @@
 body {
     background-color: white;
 }
+
+.heading{
+    text-align: center;
+}
+
+
+.game-card{
+    width: 12.1rem;
+}
+
+.cardimage{
+    width:12rem; 
+    border-radius: 20px 20px 0px 0p  !important;
+}
