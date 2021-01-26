@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,56 +22,67 @@ class Game
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"cron"})
      */
     private $name;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"cron"})
      */
     private $first_release_date;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"cron"})
      */
     private $status;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"cron"})
      */
     private $storyline;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"cron"})
      */
     private $summary;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"cron"})
      */
     private $version_title;
 
     /**
      * @ORM\ManyToOne(targetEntity=Game::class, inversedBy="children")
+     * @Groups({"cron"})
      */
     private $parent_game;
 
     /**
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="parent_game")
+     * @Groups({"cron"})
      */
     private $children;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
+     * @Groups({"cron"})
      */
     private $aggregated_rating;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"cron"})
      */
     private $aggregated_rating_count;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"cron"})
      */
     private $follows;
 
@@ -96,12 +108,12 @@ class Game
         return $this;
     }
 
-    public function getFirstReleaseDate(): ?\DateTimeInterface
+    public function getFirstReleaseDate(): ?int
     {
         return $this->first_release_date;
     }
 
-    public function setFirstReleaseDate(\DateTimeInterface $first_release_date): self
+    public function setFirstReleaseDate(int $first_release_date): self
     {
         $this->first_release_date = $first_release_date;
 

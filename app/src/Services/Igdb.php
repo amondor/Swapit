@@ -2,10 +2,13 @@
 
 namespace App\Services;
 
+
 use Exception;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use App\Entity\Game;
 
 use Symfony\Component\Serializer\Serializer;
 
@@ -14,12 +17,17 @@ class Igdb {
     protected $access_token = null;
     protected $httpClient;
     private $client;
+    private $interfaceManager;
+    
+    private $encoders;
+    private $normalizers;
+    private $serializer;
 
 
     // private $normalizer = new ObjectNormalizer($classMetadataFactory);
     // private $serializer = new Serializer([$normalizer]);
    
-    public function __construct($client ,Twitch $twitch, HttpClientInterface $httpClient) {
+    public function __construct($client ,Twitch $twitch, HttpClientInterface $httpClient, EntityManagerInterface $em) {
        
         $this->client = array_pop($client);
         
@@ -28,80 +36,114 @@ class Igdb {
             $this->access_token = $twitch->auth()['access_token'];
 
         }
+
         $this->httpClient =  $httpClient;
+        $this->interfaceManager =  $em;
+        $this->encoders = array(new JsonEncoder());
+        $this->normalizers = array(new ObjectNormalizer());
+        $this->serializer = new Serializer($this->normalizers, $this->encoders);
     }
 
     public function initCron() {
-
-        $datas = $this->getGames();
-
-        foreach($datas as $data)
-        {
-            $game = $this->serializer->deserialize($data, Person::class, 'array');
-        }
-        
+      
+        $this->initCronGames();
     }
     
-    public function getGames() {
+    public function initCronGames() {
 
-        $response = [];
+        //  for ($i=0; $i < ($this->countGames()/500); $i++) {  
+        //     $offset = ($items == 0)? 0 : $items*500;
+        //     $response = $this->getGamesList($offset,500);
+        //     $this->serializeDatas($response, Game::class);
+        // // }
 
-         for ($i=0; $i < ($this->countGames()/500); $i++) { 
-            
-             $offset = ($i == 0)? 1 : $i*500;
-             $response = array_merge($response,$this->getGamesList($offset,500));
-        
+        for ($i=0; $i < ($this->countGames()/500); $i++) {  
+            $offset = ($i == 0)? 0 : $i*500;
+            $response = $this->getGamesList($offset,500);
+            $this->serializeDatas($response, Game::class);
         }
-        return $response ;
+    }
+
+    public function serializeDatas($datas, $class) {
+
+        foreach($datas as $data) {
+            $this->serializeData($data, $class);
+        }
+
+    }
+
+    public function serializeData($data, $class) {
+
+            if(!array_key_exists("parent_game", $data))
+            {
+                $productSerialized = $this->serializer->serialize($data, 'json',['groups' => 'seo']);
+            
+                $productDeserialized = $this->serializer->deserialize($productSerialized, $class, 'json', ['groups' => 'seo']);
+    
+                $this->interfaceManager->persist($productDeserialized);
+                $this->interfaceManager->flush();
+            }  
+
     }
 
     public function getGamesList($offset, $limit) {
 
-       
-            $response = $this->httpClient->request('POST','https://api.igdb.com/v4/games',
-                                            [
-                                            'headers' => 
-                                                ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
-                                            'body' => 'fields name, first_release_date, status, storyline, summary, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows;
-                                                       limit 500;'."$limit;".'
-                                                       offset '."$offset;"
-                                            ]
-                                        )->toArray();
-        return $response; 
+        $response = $this->httpClient->request(
+                        'POST','https://api.igdb.com/v4/games',
+                        [
+                        'headers' => 
+                            ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
+                        'body' => 'fields name, first_release_date, status, storyline, summary, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows;
+                                    limit '."$limit;".'
+                                    offset '."$offset;",
+                        ]
+                    )->toArray();
+        return $response;
+
     }
 
     public function countGames() {
-        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/games/count',
-        [
-        'headers' => 
-            ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
-        ]
-    )->toArray();
-    
-    return $response['count']; 
+
+        $response = $this->httpClient->request(
+                        'POST','https://api.igdb.com/v4/games/count',
+                        [
+                            'headers' => [
+                                    'Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token
+                                ],
+                        ]
+                    )->toArray();
+        
+        return $response['count'];
+
     }
 
 
-    public function getGame($id) { 
-        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/games',
-                                        [
-                                        'headers' => 
-                                            ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
-                                        'body' => 'fields *;'
-                                                ." where id = $id ;"
-                                        ]
-                                    )->toArray();
-        return $response;
+    public function getGame($id) {
+
+        $response = $this->httpClient->request(
+                        'POST','https://api.igdb.com/v4/games',
+                        [
+                            'headers' => [
+                                    'Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token
+                                ],
+                            'body' => 'fields name, first_release_date, status, storyline, summary, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows;'
+                                    ." where id = $id ;"
+                        ]
+                    )->toArray();
+        return array_pop($response);
+        
     }
 
     public function getGenres() { 
-        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/genres',
-                                        [
-                                        'headers' => 
-                                            ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
-                                        'body' => 'fields name,url;'
-                                        ]
-                                    )->toArray();
+        $response = $this->httpClient->request(
+                        'POST','https://api.igdb.com/v4/genres',
+                        [
+                            'headers' => [
+                                    'Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token
+                                ],
+                            'body' => 'fields name,url;'
+                        ]
+                    )->toArray();
         return $response;                              
     }
     
