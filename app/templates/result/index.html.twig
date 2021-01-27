@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ResultController!{% endblock %}
+{% block navbar %} {% include '_components/navbar-default.twig' %} {% endblock %}
+
+{% block content %}
+<style>
+
+body {
+    background-color: lightgrey;
+}</style>
+<div class="container">
+<div class="row">
+
+    {# <h1>Hello {{ controller_name }}! ✅</h1> #}
+    {% for i in 1..8 %}
+        {% include '_components/profile-resume.twig' %}
+    {% endfor %}
+    
+</div>
+</div>
+
+{% endblock %}

@@ -8,5 +8,9 @@
     "popper.js": "^1.16.1",
     "stimulus": "^2.0.0",
     "webpack-notifier": "^1.6.0"
+  },
+  "dependencies": {
+    "build": "^0.1.4",
+    "sass-loader": "^10.1.1"
   }
 }
