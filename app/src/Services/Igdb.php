@@ -57,11 +57,19 @@ class Igdb {
         //     $this->serializeDatas($response, Game::class);
         // // }
 
+        // $response = $this->getGenres();
+        // $this->serializeDatas($response,Genre::class);
+
+        // $response = $this->getModes();
+        // $this->serializeDatas($response,Mode::class);
+
         for ($i=0; $i < ($this->countGames()/500); $i++) {  
             $offset = ($i == 0)? 0 : $i*500;
             $response = $this->getGamesList($offset,500);
             $this->serializeDatas($response, Game::class);
         }
+
+      
     }
 
     public function serializeDatas($datas, $class) {
@@ -69,7 +77,6 @@ class Igdb {
         foreach($datas as $data) {
             $this->serializeData($data, $class);
         }
-
     }
 
     public function serializeData($data, $class) {
@@ -83,7 +90,6 @@ class Igdb {
                 $this->interfaceManager->persist($productDeserialized);
                 $this->interfaceManager->flush();
             }  
-
     }
 
     public function getGamesList($offset, $limit) {
@@ -94,6 +100,7 @@ class Igdb {
                         'headers' => 
                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
                         'body' => 'fields name, first_release_date, status, storyline, summary, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows;
+                                    where status = (0,1,5,7);
                                     limit '."$limit;".'
                                     offset '."$offset;",
                         ]
@@ -103,6 +110,23 @@ class Igdb {
     }
 
     public function countGames() {
+
+        $response = $this->httpClient->request(
+                        'POST','https://api.igdb.com/v4/games/count',
+                        [
+                            'headers' => [
+                                    'Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token
+                                ],
+                            'body' => 'fields name, first_release_date, status, storyline, summary, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows;
+                                where status = (0,1,5,7);'
+                        ]
+                    )->toArray();
+        
+        return $response['count'];
+
+    }
+
+    public function countCharacters() {
 
         $response = $this->httpClient->request(
                         'POST','https://api.igdb.com/v4/games/count',
@@ -141,7 +165,7 @@ class Igdb {
                             'headers' => [
                                     'Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token
                                 ],
-                            'body' => 'fields name,url;'
+                            'body' => 'fields name, slug;'
                         ]
                     )->toArray();
         return $response;                              
