@@ -15,7 +15,7 @@ class Game
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -86,14 +86,27 @@ class Game
      */
     private $follows;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Company::class, mappedBy="developed")
+     */
+    private $involved_companies;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
+        $this->involved_companies = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): ?self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -243,6 +256,34 @@ class Game
     public function setFollows(?int $follows): self
     {
         $this->follows = $follows;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Company[]
+     */
+    public function getInvolvedCompanies(): Collection
+    {
+        return $this->involved_companies;
+    }
+
+    public function addInvolvedCompany(Company $involvedCompany): self
+    {
+        if (!$this->involved_companies->contains($involvedCompany)) {
+            $this->involved_companies[] = $involvedCompany;
+            $involvedCompany->addDeveloped($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvolvedCompany(Company $involvedCompany): self
+    {
+        if ($this->involved_companies->contains($involvedCompany)) {
+            $this->involved_companies->removeElement($involvedCompany);
+            $involvedCompany->removeDeveloped($this);
+        }
 
         return $this;
     }

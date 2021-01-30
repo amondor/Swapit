@@ -34,7 +34,7 @@ class RequestController extends AbstractController
         
         // echo "telechagement du lot: $items ";
 
-        dd($Igdb->countGames());
+        dd($Igdb->initCron());
         return $this->render('request/index.html.twig', [
             'controller_name' => 'RequestController',
         ]);

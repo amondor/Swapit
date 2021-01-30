@@ -69,7 +69,6 @@ class Igdb {
             $this->serializeDatas($response, Game::class);
         }
 
-      
     }
 
     public function serializeDatas($datas, $class) {
@@ -83,10 +82,10 @@ class Igdb {
 
             if(!array_key_exists("parent_game", $data))
             {
-                $productSerialized = $this->serializer->serialize($data, 'json',['groups' => 'seo']);
+                $productSerialized = $this->serializer->serialize($data, 'json',['groups' => 'cron']);
             
-                $productDeserialized = $this->serializer->deserialize($productSerialized, $class, 'json', ['groups' => 'seo']);
-    
+                $productDeserialized = $this->serializer->deserialize($productSerialized, $class, 'json', ['groups' => 'cron']);
+                dd( $productSerialized, $productDeserialized);
                 $this->interfaceManager->persist($productDeserialized);
                 $this->interfaceManager->flush();
             }  
@@ -211,7 +210,7 @@ class Igdb {
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
-                                        'body' => 'fields *;'
+                                        'body' => 'fields name, country , description;'
                                         ]
                                     )->toArray(); 
         return $response;
@@ -255,7 +254,7 @@ class Igdb {
         return $response;
     }
 
-    public function getModes() { 
+    public function getGamesModes() { 
         $response = $this->httpClient->request('POST','https://api.igdb.com/v4/game_modes',
                                         [
                                         'headers' => 
