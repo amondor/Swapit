@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,74 +15,98 @@ class Game
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"cron"})
      */
     private $name;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"cron"})
      */
     private $first_release_date;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"cron"})
      */
     private $status;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"cron"})
      */
     private $storyline;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"cron"})
      */
     private $summary;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"cron"})
      */
     private $version_title;
 
     /**
      * @ORM\ManyToOne(targetEntity=Game::class, inversedBy="children")
+     * @Groups({"cron"})
      */
     private $parent_game;
 
     /**
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="parent_game")
+     * @Groups({"cron"})
      */
     private $children;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
+     * @Groups({"cron"})
      */
     private $aggregated_rating;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"cron"})
      */
     private $aggregated_rating_count;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"cron"})
      */
     private $follows;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Company::class, mappedBy="developed")
+     */
+    private $involved_companies;
 
     public function __construct()
     {
         $this->children = new ArrayCollection();
+        $this->involved_companies = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): ?self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -96,12 +121,12 @@ class Game
         return $this;
     }
 
-    public function getFirstReleaseDate(): ?\DateTimeInterface
+    public function getFirstReleaseDate(): ?int
     {
         return $this->first_release_date;
     }
 
-    public function setFirstReleaseDate(\DateTimeInterface $first_release_date): self
+    public function setFirstReleaseDate(int $first_release_date): self
     {
         $this->first_release_date = $first_release_date;
 
@@ -231,6 +256,34 @@ class Game
     public function setFollows(?int $follows): self
     {
         $this->follows = $follows;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Company[]
+     */
+    public function getInvolvedCompanies(): Collection
+    {
+        return $this->involved_companies;
+    }
+
+    public function addInvolvedCompany(Company $involvedCompany): self
+    {
+        if (!$this->involved_companies->contains($involvedCompany)) {
+            $this->involved_companies[] = $involvedCompany;
+            $involvedCompany->addDeveloped($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvolvedCompany(Company $involvedCompany): self
+    {
+        if ($this->involved_companies->contains($involvedCompany)) {
+            $this->involved_companies->removeElement($involvedCompany);
+            $involvedCompany->removeDeveloped($this);
+        }
 
         return $this;
     }
