@@ -12,6 +12,12 @@
 
         private $igdb;
 
+        public function __construct(igdb $igdb)
+        {
+            $this->igdb = $igdb;
+            parent::__construct();
+        }
+
         protected function configure () {
             // On set le nom de la commande
             $this->setName('app:getdata');
@@ -24,12 +30,10 @@
 
         }
 
-        public function getIgdb(Igdb $igdb){
-            $this->$igdb = $igdb;
-        }
-
         public function execute (InputInterface $input, OutputInterface $output) {
-
+            ini_set('memory_limit', '1024M');
+            $this->igdb->initCron();
             $output->write('DONE !');
+            return Command::SUCCESS;
         }
     }
