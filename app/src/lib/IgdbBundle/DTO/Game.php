@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\IgdbBundle\DTO;
 
 use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;

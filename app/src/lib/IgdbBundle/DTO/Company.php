@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\IgdbBundle\DTO;
 
 use App\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;

@@ -5,6 +5,7 @@ namespace App\Controller;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use App\IgdbBundle\IgdbWrapper\IgdbWrapper;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Services\Igdb;
 use Symfony\Bridge\PhpUnit\TextUI\Command;
@@ -20,7 +21,7 @@ class RequestController extends AbstractController
     /**
      * @Route("/", name="request", methods={"GET"})
      */
-    public function authAccess(Igdb $Igdb, int $items = 0)
+    public function authAccess(IgdbWrapper $Igdb)
     {
         // $iteration =   $Igdb->countGames() / 500;
         // $nextItem = $items + 1;

@@ -82,13 +82,27 @@ class Igdb {
 
             if(!array_key_exists("parent_game", $data))
             {
+                foreach ($data as $key => $param) {
+                    if (is_array($param)) {
+                        dd( $key,$param);
+                    }
+
+                }
+
                 $productSerialized = $this->serializer->serialize($data, 'json',['groups' => 'cron']);
             
                 $productDeserialized = $this->serializer->deserialize($productSerialized, $class, 'json', ['groups' => 'cron']);
-                dd( $productSerialized, $productDeserialized);
+            
                 $this->interfaceManager->persist($productDeserialized);
                 $this->interfaceManager->flush();
             }  
+    }
+
+    public function serelizeDepedencies($product, $id, $class) {
+        $class = ucfirst($class);
+        $productDependence = new $class();
+        $productDependence = $productDependence->getEntityManager()->find($id);
+        $product->add.$class($productDependence);
     }
 
     public function getGamesList($offset, $limit) {
@@ -98,7 +112,7 @@ class Igdb {
                         [
                         'headers' => 
                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
-                        'body' => 'fields name, first_release_date, status, storyline, summary, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows;
+                        'body' => 'fields name, first_release_date, status, storyline, summary, version_title, age_ratings, aggregated_rating, aggregated_rating_count, follows, genres;
                                     where status = (0,1,5,7);
                                     limit '."$limit;".'
                                     offset '."$offset;",
@@ -117,10 +131,10 @@ class Igdb {
                                     'Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token
                                 ],
                             'body' => 'fields name, first_release_date, status, storyline, summary, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows;
-                                where status = (0,1,5,7);'
+                                where status = null;'
                         ]
                     )->toArray();
-        
+        dd($response);
         return $response['count'];
 
     }
@@ -206,7 +220,7 @@ class Igdb {
     }
 
     public function getCompanies() { 
-        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/characters',
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/companies',
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
@@ -216,8 +230,8 @@ class Igdb {
         return $response;
     }
 
-    public function getCompanie($id) { 
-        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/characters',
+    public function getCompany($id) { 
+        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/companies',
                                         [
                                         'headers' => 
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],

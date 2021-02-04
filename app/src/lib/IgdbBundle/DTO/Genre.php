@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Entity;
+namespace App\IgdbBundle\DTO;
 
-use App\Repository\PlatformRepository;
+use App\Repository\GenreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=PlatformRepository::class)
+ * @ORM\Entity(repositoryClass=GenreRepository::class)
  */
-class Platform
+class Genre
 {
     /**
      * @ORM\Id
@@ -33,13 +33,7 @@ class Platform
     private $slug;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"cron"})
-     */
-    private $url;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Game::class, mappedBy="platforms")
+     * @ORM\ManyToMany(targetEntity=Game::class, mappedBy="genres")
      */
     private $games;
 
@@ -84,18 +78,6 @@ class Platform
         return $this;
     }
 
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    public function setUrl(?string $url): self
-    {
-        $this->url = $url;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Game[]
      */
@@ -108,7 +90,7 @@ class Platform
     {
         if (!$this->games->contains($game)) {
             $this->games[] = $game;
-            $game->addPlatform($this);
+            $game->addGenre($this);
         }
 
         return $this;
@@ -118,7 +100,7 @@ class Platform
     {
         if ($this->games->contains($game)) {
             $this->games->removeElement($game);
-            $game->removePlatform($this);
+            $game->removeGenre($this);
         }
 
         return $this;

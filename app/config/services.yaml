@@ -39,3 +39,15 @@ services:
     App\Services\Igdb:
         arguments: 
             - client: '%env(IGDB_CLIENT)%'
+
+    App\IgdbBundle\IgdbWrapper\TwitchWrapper:
+        arguments: 
+            - client: '%env(IGDB_CLIENT)%'
+            - secret: '%env(TWITCH_SECRET)%'
+            - grant_type: '%env(TWITCH_GRANT_TYPE)%'
+            - url: '%env(TWITCH_AUTH_URL)%'
+
+    App\IgdbBundle\IgdbWrapper\IgdbWrapper:
+        arguments: 
+            - client: '%env(IGDB_CLIENT)%'
+            - url: '%env(IGDB_BASE_URL)%'
