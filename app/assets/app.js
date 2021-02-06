@@ -9,4 +9,21 @@
 import './styles/app.css';
 
 // start the Stimulus application
-import './bootstrap';
+//import './bootstrap';
+const $ =  require('jquery');
+const jquery = require('jquery');
+const jQuery =  require('jquery');
+require('jquery');
+require('select2');
+require('bootstrap');
+
+$(document).ready(function() {
+    $('#add_game_to_list_OwnGames').select2();
+    
+    $('#add_game_to_list_wish').select2();
+});
+
+$(document).change(function() {
+    console.log($('#add_game_to_list_OwnGames').val());
+    /* $wish = $('#add_game_to_list_wish').val(); */
+});

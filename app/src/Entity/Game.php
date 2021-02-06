@@ -91,10 +91,16 @@ class Game
      */
     private $involved_companies;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="OwnGames")
+     */
+    private $Owners;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
         $this->involved_companies = new ArrayCollection();
+        $this->Owners = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -283,6 +289,34 @@ class Game
         if ($this->involved_companies->contains($involvedCompany)) {
             $this->involved_companies->removeElement($involvedCompany);
             $involvedCompany->removeDeveloped($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getOwners(): Collection
+    {
+        return $this->Owners;
+    }
+
+    public function addOwner(User $owner): self
+    {
+        if (!$this->Owners->contains($owner)) {
+            $this->Owners[] = $owner;
+            $owner->addOwnGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOwner(User $owner): self
+    {
+        if ($this->Owners->contains($owner)) {
+            $this->Owners->removeElement($owner);
+            $owner->removeOwnGame($this);
         }
 
         return $this;

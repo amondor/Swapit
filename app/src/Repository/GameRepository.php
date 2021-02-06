@@ -47,4 +47,17 @@ class GameRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findAllNames()
+    {
+        $gamesNames = $this->createQueryBuilder('game')
+            ->select('game.name')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return array_map(function($game){ 
+            return $game['name'];
+        }, $gamesNames);
+    }
 }

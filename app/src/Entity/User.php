@@ -53,10 +53,16 @@ class User implements UserInterface
      */
     private $offers;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Game::class, inversedBy="Owners")
+     */
+    private $OwnGames;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->offers = new ArrayCollection();
+        $this->OwnGames = new ArrayCollection();
     }
 
 
@@ -168,6 +174,32 @@ class User implements UserInterface
             if ($offer->getProposer() === $this) {
                 $offer->setProposer(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Game[]
+     */
+    public function getOwnGames(): Collection
+    {
+        return $this->OwnGames;
+    }
+
+    public function addOwnGame(Game $ownGame): self
+    {
+        if (!$this->OwnGames->contains($ownGame)) {
+            $this->OwnGames[] = $ownGame;
+        }
+
+        return $this;
+    }
+
+    public function removeOwnGame(Game $ownGame): self
+    {
+        if ($this->OwnGames->contains($ownGame)) {
+            $this->OwnGames->removeElement($ownGame);
         }
 
         return $this;

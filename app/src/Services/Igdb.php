@@ -85,7 +85,7 @@ class Igdb {
                 $productSerialized = $this->serializer->serialize($data, 'json',['groups' => 'cron']);
             
                 $productDeserialized = $this->serializer->deserialize($productSerialized, $class, 'json', ['groups' => 'cron']);
-                dd( $productSerialized, $productDeserialized);
+                /* dd( $productSerialized, $productDeserialized); */
                 $this->interfaceManager->persist($productDeserialized);
                 $this->interfaceManager->flush();
             }  

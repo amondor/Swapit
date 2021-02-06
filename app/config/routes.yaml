@@ -1,3 +1,8 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+autocomplete:
+    path: /autocomplete/games
+    controller: App\Controller\UserController::autocomplete
+    methods: GET
