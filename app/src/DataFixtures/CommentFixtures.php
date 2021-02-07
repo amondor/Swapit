@@ -14,27 +14,27 @@ class CommentFixtures extends Fixture /*implements FixtureGroupInterface*/
 {
     public function load(ObjectManager $manager)
     {
-        $faker = Faker\Factory::create('fr_FR');
+        // $faker = Faker\Factory::create('fr_FR');
 
-        for($count = 0; $count < 3; $count++) {
-            $comment = new Comment();
-            $comment->setAuthor($this->getReference(UserFixtures::USER_REFERENCE));
-            $comment->setContent($faker->text);
-            $comment->setCreatedAt($faker->formattedDate);
-            // $comment->setParent();
+        // for($count = 0; $count < 3; $count++) {
+        //     $comment = new Comment();
+        //     $comment->setContent($faker->text);
+        //     $comment->setCreatedAt($faker->dateTime());
+        //     // $comment->setAuthor($this->getReference(UserFixtures::USER_REFERENCE)); /*ID*/
+        //     // $comment->setParent(); /*ID*/
 
-            $manager->persist($comment);
-        }
+        //     $manager->persist($comment);
+        // }
         
-        $manager->flush();
+        // $manager->flush();
     }
 
-    public function getDependencies()
-    {
-        return array(
-            UserFixtures::class
-        );
-    }
+    // public function getDependencies()
+    // {
+    //     return array(
+    //         UserFixtures::class
+    //     );
+    // }
 
     // GROUPE DE FIXTURES
 
