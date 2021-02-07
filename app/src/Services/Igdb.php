@@ -85,7 +85,6 @@ class Igdb {
                 $productSerialized = $this->serializer->serialize($data, 'json',['groups' => 'cron']);
             
                 $productDeserialized = $this->serializer->deserialize($productSerialized, $class, 'json', ['groups' => 'cron']);
-                dd( $productSerialized, $productDeserialized);
                 $this->interfaceManager->persist($productDeserialized);
                 $this->interfaceManager->flush();
             }  
@@ -99,13 +98,30 @@ class Igdb {
                         'headers' => 
                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
                         'body' => 'fields name, first_release_date, status, storyline, summary, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows;
-                                    where status = (0,1,5,7);
+                                    where status = null;
                                     limit '."$limit;".'
                                     offset '."$offset;",
                         ]
                     )->toArray();
         return $response;
+    }
 
+    public function getGameCovers($id) { 
+        $response = $this->httpClient->request(
+                        'POST','https://api.igdb.com/v4/covers',
+                        [
+                        'headers' => 
+                            ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
+                            'body' => 'fields *; where game = '.$id.';'
+                        ]
+                    )->toArray();
+        $new_array = array_reduce($response, 'array_merge', array());
+        if(empty($new_array['image_id'])){
+            return 'nocover_qhhlj6';
+        }
+        else{
+            return $new_array['image_id'];
+        }
     }
 
     public function countGames() {
@@ -117,7 +133,7 @@ class Igdb {
                                     'Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token
                                 ],
                             'body' => 'fields name, first_release_date, status, storyline, summary, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows;
-                                where status = (0,1,5,7);'
+                                where status = null;'
                         ]
                     )->toArray();
         
@@ -149,16 +165,16 @@ class Igdb {
                             'headers' => [
                                     'Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token
                                 ],
-                            'body' => 'fields name, first_release_date, status, storyline, summary, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows;'
-                                    ." where id = $id ;"
+                            'body' => 'fields genres;'." where id = $id ;"
                         ]
                     )->toArray();
+        dd($response);
         return array_pop($response);
         
     }
 
-    public function getGenres() { 
-        $response = $this->httpClient->request(
+    public function getGenres($id) { 
+        $genres = $this->httpClient->request(
                         'POST','https://api.igdb.com/v4/genres',
                         [
                             'headers' => [
@@ -167,7 +183,38 @@ class Igdb {
                             'body' => 'fields name, slug;'
                         ]
                     )->toArray();
-        return $response;                              
+
+        $game = $this->httpClient->request(
+            'POST','https://api.igdb.com/v4/games',
+            [
+                'headers' => [
+                        'Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token
+                    ],
+                'body' => 'fields genres;'." where id = $id ;"
+            ]
+        )->toArray();
+        // dd($game);
+
+        $gameArrayUniq = array_reduce($game, 'array_merge', array());
+
+        if(array_key_exists('genres', $gameArrayUniq) == false){
+            return "null";
+        }
+
+        $genreNumber = array_shift($gameArrayUniq['genres']);
+
+        for($i=0; $i<count($genres); $i++){
+            if($genreNumber == $genres[$i]['id']){
+                $gameGenre = $genres[$i]['name'];
+                break;
+            }
+        }
+
+        if(empty($gameGenre)){
+            return 'null';
+        }else{
+            return $gameGenre;
+        }                            
     }
     
     public function getCharacters() { 
@@ -235,20 +282,6 @@ class Igdb {
                                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
                                         'body' => 'fields *;'
                                                 ." search  \"$search\" ;"
-                                        ]
-                                    )->toArray(); 
-        return $response;
-    }
-
-
-    public function getGameCovers($id) { 
-        $response = $this->httpClient->request('POST','https://api.igdb.com/v4/covers',
-                                        [
-                                        'headers' => 
-                                            ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
-                                        'body' => 'fields *;'
-                                                ." where game = $id ;
-                                                limit 1"
                                         ]
                                     )->toArray(); 
         return $response;

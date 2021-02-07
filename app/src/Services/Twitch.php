@@ -27,8 +27,10 @@ class Twitch {
 
     public function auth() : array
     {
-        $response =  $this->HttpClient->request('POST', 'https://id.twitch.tv/oauth2/token', ['query' => ['client_id' => $this->client, 'client_secret' => $this->secret , 'grant_type' => $this->grantType]]);
-           
+        $response =  $this->HttpClient->request('POST', 'https://id.twitch.tv/oauth2/token', 
+        [
+            'query' => ['client_id' => $this->client, 'client_secret' => $this->secret , 'grant_type' => $this->grantType]
+        ]);
         if($response->getStatusCode() != 200)
         {
             throw new Exception('auth innaccessible : '.$response->getStatusCode() != 200);

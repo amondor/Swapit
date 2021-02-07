@@ -1,5 +1,6 @@
 {
     "require": {
-        "symfony/asset": "^5.2"
+        "symfony/asset": "^5.2",
+        "knplabs/knp-paginator-bundle": "^5.4"
     }
 }
