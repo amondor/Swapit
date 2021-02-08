@@ -61,13 +61,15 @@ public function initCronGames()
     $response = $this->getPlatforms();
     $this->serializeDatas($response,PlatformMapper::class);
 
-    for ($i=0; $i < ($this->countCompanies()/500); $i++) {  
+    $companiesCount = $this->countCompanies()/500;
+    for ($i=0; $i < $companiesCount; $i++) {  
         $offset = ($i == 0)? 0 : $i*500;
         $response = $this->getCompanies($offset);
         $this->serializeDatas($response, CompanyMapper::class);
     }
 
-    for ($i=0; $i < ($this->countGames()/500); $i++) {  
+    $gameCount = $this->countGames()/500;
+    for ($i=0; $i < $gameCount; $i++) {  
         $offset = ($i == 0)? 0 : $i*500;
         $response = $this->getGames($offset);
         $this->serializeDatas($response, GameMapper::class);
@@ -91,19 +93,6 @@ public function serializeData($data, $class)
             $this->interfaceManager->flush();
         }
 }
-
-// public function serializeData($data, $class) 
-// {
-//         if(!array_key_exists("parent_game", $data))
-//         {
-//             $productSerialized = $this->serializer->serialize($data, 'json',['groups' => 'cron']);
-        
-//             $productDeserialized = $this->serializer->deserialize($productSerialized, $class, 'json', ['groups' => 'cron']);
-
-//             $this->interfaceManager->persist($productDeserialized);
-//             $this->interfaceManager->flush();
-//         }  
-// }
 
 public function getGames($offset, $limit = 500) {
 
@@ -214,7 +203,7 @@ public function countCompanies() {
 public function countCharacters() {
 
     $response = $this->httpClient->request(
-                    'POST','https://api.igdb.com/v4/games/count',
+                    'POST','https://api.igdb.com/v4/characters/count',
                     [
                         'headers' => [
                                 'Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token
