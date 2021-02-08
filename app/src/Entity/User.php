@@ -54,15 +54,24 @@ class User implements UserInterface
     private $offers;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Game::class, inversedBy="Owners")
+     * @ORM\ManyToMany(targetEntity=Game::class, inversedBy="Owners"),
+     * @ORM\JoinTable(name="User_Own_Games")
      */
     private $OwnGames;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Game::class, inversedBy="Wishers"),
+     * @ORM\JoinTable(name="User_Wish_Games")
+     */
+    private $WishGames;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->offers = new ArrayCollection();
         $this->OwnGames = new ArrayCollection();
+        $this->WishGames = new ArrayCollection();
+        $this->toto = new ArrayCollection();
     }
 
 
@@ -200,6 +209,58 @@ class User implements UserInterface
     {
         if ($this->OwnGames->contains($ownGame)) {
             $this->OwnGames->removeElement($ownGame);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Game[]
+     */
+    public function getWishGames(): Collection
+    {
+        return $this->WishGames;
+    }
+
+    public function addWishGame(Game $wishGame): self
+    {
+        if (!$this->WishGames->contains($wishGame)) {
+            $this->WishGames[] = $wishGame;
+        }
+
+        return $this;
+    }
+
+    public function removeWishGame(Game $wishGame): self
+    {
+        if ($this->WishGames->contains($wishGame)) {
+            $this->WishGames->removeElement($wishGame);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Game[]
+     */
+    public function getToto(): Collection
+    {
+        return $this->toto;
+    }
+
+    public function addToto(Game $toto): self
+    {
+        if (!$this->toto->contains($toto)) {
+            $this->toto[] = $toto;
+        }
+
+        return $this;
+    }
+
+    public function removeToto(Game $toto): self
+    {
+        if ($this->toto->contains($toto)) {
+            $this->toto->removeElement($toto);
         }
 
         return $this;

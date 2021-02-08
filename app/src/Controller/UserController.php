@@ -68,28 +68,17 @@ class UserController extends AbstractController
         return $this->render('front/user/user_own_games_list.html.twig', [
             'form' => $form->createView()
         ]);
-
-
     }
 
     /**
      * @Route("/userwishgameslists", name="userwishgameslists")
      */
-    public function userWishGamesLists(GameRepository $gameRepository){
-
-        $games = $gameRepository->findAllNames();
+    public function userWishGamesLists(Request $request){
 
         $form = $this->createForm(AddGameToListType::class);
-        /* $form->handleRequest(); */
 
-
-        $gameMapped = [];
-
-        foreach ($games as $game){
-            $gameMapped[$game] = $game;
-        }
-
-        $form->add('wish', ChoiceType::class, [
+        $form->add('WishGames', EntityType::class, [
+                'class' => Game::class,
                 'multiple' => 'multiple',
                 'method' => "post" ,
                 'action' => "",
@@ -98,34 +87,31 @@ class UserController extends AbstractController
                     'placeholder' => 'Jeux',
                     'name' => "states[]"
                 ],
-                'choices' => $gameMapped
-        ]);
-
-        return $this->render('front/user/user_wish_games_list.html.twig', [
-            'form' => $form->createView()
+                'choice_label' => 'name'
         ]);
 
 
-        $form->handleRequest($form);
+        $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            /* $em = $this->getDoctrine()->getManager();
-            $em->persist($);
+            $data = $request->request->get($form->getName());
+            $dataWishGames = $data['WishGames'];
+            $user = $this->getUser();
+            foreach ($dataWishGames as $wishGame){
+                $game = $this->getDoctrine()->getRepository(Game::class)->find($wishGame);
+                $user->addWishGame($game);
+            } 
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
             $em->flush();
 
             $this->addFlash('red', 'Livre créé.');
 
-            return $this->redirectToRoute('back_book_show', ['slug' => $book->getSlug()]); */
-            /* dd($own); */
-            return $this->redirectToRoute("home");
+            return $this->redirectToRoute("userwishgameslists");
         }
 
+        return $this->render('front/user/user_wish_games_list.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
-
-    public function autocomplete()
-    {
-        $search = strip_tags(trim($_POST['term']));
-
-        return true;
-    }
-
 }

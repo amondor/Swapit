@@ -18,12 +18,6 @@ require('select2');
 require('bootstrap');
 
 $(document).ready(function() {
-    $('#add_game_to_list_OwnGames').select2();
-    
-    $('#add_game_to_list_wish').select2();
-});
-
-$(document).change(function() {
-    console.log($('#add_game_to_list_OwnGames').val());
-    /* $wish = $('#add_game_to_list_wish').val(); */
+    $('#add_game_to_list_OwnGames').select2();  
+    $('#add_game_to_list_WishGames').select2();
 });

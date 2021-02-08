@@ -93,14 +93,23 @@ class Game
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class, mappedBy="OwnGames")
+     * @ORM\JoinTable(name="User_Own_Games")
      */
     private $Owners;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="WishGames"),
+     * @ORM\JoinTable(name="User_Wish_Games")
+     */
+    private $Wishers;
 
     public function __construct()
     {
         $this->children = new ArrayCollection();
         $this->involved_companies = new ArrayCollection();
         $this->Owners = new ArrayCollection();
+        $this->Wishers = new ArrayCollection();
+        $this->toto = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -317,6 +326,62 @@ class Game
         if ($this->Owners->contains($owner)) {
             $this->Owners->removeElement($owner);
             $owner->removeOwnGame($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getWishers(): Collection
+    {
+        return $this->Wishers;
+    }
+
+    public function addWisher(User $wisher): self
+    {
+        if (!$this->Wishers->contains($wisher)) {
+            $this->Wishers[] = $wisher;
+            $wisher->addWishGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWisher(User $wisher): self
+    {
+        if ($this->Wishers->contains($wisher)) {
+            $this->Wishers->removeElement($wisher);
+            $wisher->removeWishGame($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getToto(): Collection
+    {
+        return $this->toto;
+    }
+
+    public function addToto(User $toto): self
+    {
+        if (!$this->toto->contains($toto)) {
+            $this->toto[] = $toto;
+            $toto->addToto($this);
+        }
+
+        return $this;
+    }
+
+    public function removeToto(User $toto): self
+    {
+        if ($this->toto->contains($toto)) {
+            $this->toto->removeElement($toto);
+            $toto->removeToto($this);
         }
 
         return $this;
