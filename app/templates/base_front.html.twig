@@ -10,10 +10,10 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <img src="https://i.ibb.co/Jptwgbf/logo.png" alt="" width="70" height="50">
+                <img src="https://i.ibb.co/zJQvRDt/logo.png" width="70" height="50"/>
             </a>
             <a class="navbar-brand" href="#">
-                <img src="https://i.ibb.co/QDjHSyx/Swap-it-text-logo.png" alt="" width="110" height="40">
+                <img src="https://i.ibb.co/dmB0cwQ/text-swapit.png" width="110" height="40"/>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -26,21 +26,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{path("games")}}">Jeux</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Nos plateformes
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">SNES</a></li>
-                        <li><a class="dropdown-item" href="#">Nintendo 64</a></li>
-                        <li><a class="dropdown-item" href="#">Game Cube</a></li>
-                    </ul>
-                </li>
                 </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
                 <ul class="navbar-nav justify-contend-end">
                 {% if not app.user %}
                     <li class="nav-item">
@@ -50,6 +36,9 @@
                         <a class="nav-link" href="{{path("login")}}">Connexion</a>
                     </li>
                 {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{path("user_profile")}}"><img style="width:25px; height:25px" src="https://i.ibb.co/pvxsxkc/user.png"></img></a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{path("logout")}}">Déconnexion</a>
                     </li>

@@ -5,15 +5,15 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class GamesController extends AbstractController
+class UserController extends AbstractController
 {
     /**
-     * @Route("/games", name="games")
+     * @Route("/user_profile", name="user_profile")
      */
     public function index()
     {
-        return $this->render('front/games/games.html.twig', [
-            'controller_name' => 'GamesController',
+        return $this->render('front/user/user_profile.html.twig', [
+            'controller_name' => 'UserController',
         ]);
     }
 }

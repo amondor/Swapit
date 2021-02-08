@@ -1,0 +1,42 @@
+{% extends 'base_front.html.twig' %}
+
+
+{% block body %}
+
+<title>Les jeux</title>
+
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        .btn-wrapper{ display: flex; justify-content: center; align-items: center; }
+        body {background-color: #ECECEC; }
+        .card {border-radius: 20px; margin-left:20px; margin-top: 20px;}
+        .card-container{ 
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            align-items: center;
+            }
+    </style>
+    <form style="margin-top: 10px;" role="search" class="d-flex" method="get" action="{{ path('search') }}">
+        <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+    <div class="card-container">
+        {% for game in games %}
+            <div class="card" style="width: 14.1rem;">
+                <img style="width:224px; border-radius: 20px 20px 0px 0px" src="//images.igdb.com/igdb/image/upload/t_cover_big/{{ igdb.getGameCovers(game.getId) }}.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 style="text-align: center;" class="card-title">{{ game.getName }}</h5>
+                    <p class="card-text text-secondary">{{igdb.getGenres(game.getId)}}, {{ game.getFirstReleaseDate|format_datetime('short', 'none', locale='fr') }}</p>
+                    <div class="btn-wrapper">
+                        <a style="" href="{{ path('show', {'id': game.id}) }}" class="btn btn-primary">Voir</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="pagination-render" style="display: flex; justify-content: center; align-items: center;">
+        {{ knp_pagination_render(games) }}
+    </div>
+{% endblock %}
