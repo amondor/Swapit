@@ -52,21 +52,21 @@ public function initCron()
 
 public function initCronGames() 
 {
-    $response = $this->getGenres();
-    $this->serializeDatas($response,GenreMapper::class);
+    // $response = $this->getGenres();
+    // $this->serializeDatas($response,GenreMapper::class);
 
-    $response = $this->getGamesModes();
-    $this->serializeDatas($response,GameModeMapper::class);
+    // $response = $this->getGamesModes();
+    // $this->serializeDatas($response,GameModeMapper::class);
   
-    $response = $this->getPlatforms();
-    $this->serializeDatas($response,PlatformMapper::class);
+    // $response = $this->getPlatforms();
+    // $this->serializeDatas($response,PlatformMapper::class);
 
-    $companiesCount = $this->countCompanies()/500;
-    for ($i=0; $i < $companiesCount; $i++) {  
-        $offset = ($i == 0)? 0 : $i*500;
-        $response = $this->getCompanies($offset);
-        $this->serializeDatas($response, CompanyMapper::class);
-    }
+    // $companiesCount = $this->countCompanies()/500;
+    // for ($i=0; $i < $companiesCount; $i++) {  
+    //     $offset = ($i == 0)? 0 : $i*500;
+    //     $response = $this->getCompanies($offset);
+    //     $this->serializeDatas($response, CompanyMapper::class);
+    // }
 
     $gameCount = $this->countGames()/500;
     for ($i=0; $i < $gameCount; $i++) {  
@@ -88,9 +88,12 @@ public function serializeData($data, $class)
         if(!array_key_exists("parent_game", $data))
         {      
             $productMapped = $class::map($data, $this->interfaceManager);
-        
-            $this->interfaceManager->persist($productMapped);
-            $this->interfaceManager->flush();
+
+            if ($productMapped !== null) {
+                $this->interfaceManager->persist($productMapped);
+                $this->interfaceManager->flush();
+            }
+           
         }
 }
 

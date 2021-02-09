@@ -60,18 +60,6 @@ class Game
     private $version_title;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Game::class, inversedBy="children")
-     * @Groups({"cron"})
-     */
-    private $parent_game;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Game::class, mappedBy="parent_game")
-     * @Groups({"cron"})
-     */
-    private $children;
-
-    /**
      * @ORM\Column(type="float", nullable=true)
      * @Groups({"cron"})
      */
@@ -213,49 +201,6 @@ class Game
     public function setVersionTitle(?string $version_title): self
     {
         $this->version_title = $version_title;
-
-        return $this;
-    }
-
-    public function getParentGame(): ?self
-    {
-        return $this->parent_game;
-    }
-
-    public function setParentGame(?self $parent_game): self
-    {
-        $this->parent_game = $parent_game;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|self[]
-     */
-    public function getChildren(): Collection
-    {
-        return $this->children;
-    }
-
-    public function addChild(self $child): self
-    {
-        if (!$this->children->contains($child)) {
-            $this->children[] = $child;
-            $child->setParentGame($this);
-        }
-
-        return $this;
-    }
-
-    public function removeChild(self $child): self
-    {
-        if ($this->children->contains($child)) {
-            $this->children->removeElement($child);
-            // set the owning side to null (unless already changed)
-            if ($child->getParentGame() === $this) {
-                $child->setParentGame(null);
-            }
-        }
 
         return $this;
     }

@@ -7,14 +7,19 @@ use stdClass;
 
 class CompanyMapper
 {
-    public static function map(array $input, \Doctrine\ORM\EntityManager $em): Company
+    public static function map(array $input, \Doctrine\ORM\EntityManager $em): ?Company
     {
-        $Company = new Company();
+        if ($em->getRepository(Company::class)->find($input['id'])) {
 
+            return null;
+        }
+
+        $Company = new Company();
         $Company->setId($input['id']);
         $Company->setName($input['name']);
         $Company->setCountry($input['country'] ?? null);
         $Company->setDescription($input['description'] ?? null);
+
         return $Company;
     }
 }
