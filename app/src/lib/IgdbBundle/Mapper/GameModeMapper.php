@@ -8,8 +8,14 @@ use stdClass;
 
 class GameModeMapper
 {
-    public static function map(array $input, \Doctrine\ORM\EntityManager $em): GameMode
+    public static function map(array $input, \Doctrine\ORM\EntityManager $em): ?GameMode
     {
+
+        if ($em->getRepository(GameMode::class)->find($input['id'])) {
+
+            return null;
+        }
+
         $GameMode = new GameMode();
 
         $GameMode->setId($input['id']);

@@ -6,8 +6,13 @@ use App\Entity\Platform;
 
 class PlatformMapper
 {
-    public static function map(array $input, \Doctrine\ORM\EntityManager $em): Platform
+    public static function map(array $input, \Doctrine\ORM\EntityManager $em): ?Platform
     {
+        if ($em->getRepository(Platform::class)->find($input['id'])) {
+
+            return null;
+        }
+
         $Platform = new Platform();
 
         $Platform->setId($input['id']);

@@ -7,8 +7,14 @@ use stdClass;
 
 class GenreMapper
 {
-    public static function map(array $input, \Doctrine\ORM\EntityManager $em): Genre
+    public static function map(array $input, \Doctrine\ORM\EntityManager $em): ?Genre
     {
+        
+        if ($em->getRepository(Genre::class)->find($input['id'])) {
+
+            return null;
+        }
+
         $Genre = new Genre();
 
         $Genre->setId($input['id']);

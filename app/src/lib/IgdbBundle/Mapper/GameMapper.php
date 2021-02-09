@@ -11,8 +11,12 @@ use stdClass;
 
 class GameMapper
 {
-    public static function map(array $input, \Doctrine\ORM\EntityManager $em): Game
+    public static function map(array $input, \Doctrine\ORM\EntityManager $em): ?Game 
     {
+     if ($em->getRepository(Game::class)->find($input['id'])) {
+
+         return null;
+     }
         $Game = new Game();
 
         $Game->setId($input['id']);
@@ -38,7 +42,7 @@ class GameMapper
             }
         }
 
-        if(array_key_exists('involved_companies', $input)){
+        if(array_key_exists('involved_companies', $input)) {
             foreach ($input['involved_companies'] as $companyId) {
 
                 $company = $em->getRepository(Company::class)->find($companyId);
@@ -71,6 +75,7 @@ class GameMapper
 
             }
         }
+
         return $Game;
     }
 
