@@ -60,9 +60,7 @@ class UserController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            $this->addFlash('red', 'Livre créé.');
-
-            return $this->redirectToRoute("userwishgameslists");
+            $this->addFlash('success', 'Jeux ajoutés !');
         }
 
         return $this->render('front/user/user_own_games_list.html.twig', [
@@ -105,9 +103,7 @@ class UserController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            $this->addFlash('red', 'Livre créé.');
-
-            return $this->redirectToRoute("userwishgameslists");
+            $this->addFlash('success', 'Jeux ajoutés !');
         }
 
         return $this->render('front/user/user_wish_games_list.html.twig', [

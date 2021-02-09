@@ -7,6 +7,9 @@
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
+import './styles/swap_game.css';
+
+import './js/form.js';
 
 // start the Stimulus application
 //import './bootstrap';
@@ -16,8 +19,3 @@ const jQuery =  require('jquery');
 require('jquery');
 require('select2');
 require('bootstrap');
-
-$(document).ready(function() {
-    $('#add_game_to_list_OwnGames').select2();  
-    $('#add_game_to_list_WishGames').select2();
-});

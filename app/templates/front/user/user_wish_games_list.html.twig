@@ -1,9 +1,16 @@
 {% extends 'base_front.html.twig' %}
 
 {% block body %}
-<h2>Ma Wishlist</h2>
+{% for message in app.flashes('success') %}
+<div class="alert alert-success">
+    {{ message }}
+</div>
+{% endfor %}
+<div class="content mt-5">
+<h1 class="mb-5">Ma Wishlist</h1>
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button type="submit" class="btn btn-success">Valider</button>
+    <button type="submit" class="btn btn-success mt-4">Ajouter</button>
 {{ form_end(form) }}
+</div>
 {% endblock %}
