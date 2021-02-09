@@ -34,7 +34,7 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/result", name="search", methods={"GET"})
+     * @Route("/result", name="search", methods={"GET", "POST"})
      */
     public function searchGameAction(Request $request, GameRepository $gameRepository, Igdb $igdb, PaginatorInterface $paginator){
         $search = $request->query->get('search');
@@ -51,6 +51,30 @@ class GameController extends AbstractController
             'igdb' => $igdb
         ]);
     }
+
+    // FEATURE EN COURS : POUR LE MOMENT C'EST BUGUE
+    // /**
+    //  * @Route("/result", name="search", methods={"GET", "POST"})
+    //  */
+    // public function searchGameFiltered(Request $request, GameRepository $gameRepository, Igdb $igdb, PaginatorInterface $paginator){
+    //     $search['name'] = $request->request->get('search');
+
+    //     if(!empty($request->request->get('genre'))){ $search['genre'] = $request->request->get('genre'); } 
+    //     // (!$request->query->get('genre')) ? : $search['genre'] = $request->request->get('genre');
+
+    //     $gameSearched = $gameRepository->search($search);
+
+    //     $gamesData = $paginator->paginate(
+    //         $gameSearched,
+    //         $request->query->getInt('page', 1),
+    //         15
+    //     );
+
+    //     return $this->render('front/games/search-games.html.twig', [
+    //         'games' => $gamesData,
+    //         'igdb' => $igdb
+    //     ]);
+    // }
 
     /**
      * @Route("/show/{id}", name="show", methods={"GET"})

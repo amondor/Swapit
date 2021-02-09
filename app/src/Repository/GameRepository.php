@@ -38,18 +38,21 @@ class GameRepository extends ServiceEntityRepository
                 }
             } 
             else { 
-                $separator = ($key == 'name')? ' LIKE ':' = ';
-                    $queryBuilder 
-                        ->andWhere("$key.$key $separator $key")
-                        ->setParameter($key, $filter['name']);
+                // $separator = ($key == 'name')? ' LIKE ':' = ';
+                    // $queryBuilder 
+                    //     ->andWhere("$key.$key $separator $key")
+                    //     ->setParameter($key, $filter);
             }
         }
-        $queryBuilder            
+        // $separator = ($key == 'name')? ' LIKE ':' = ';
+        // dd($key);
+        $queryBuilder
+            ->andWhere("$key".".$key LIKE :$key")
+            ->setParameter($key, $filter)       
             ->orderBy('g.name', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult() 
-        ;
+            ->getResult();
     }
 
     public function save(Game $game)

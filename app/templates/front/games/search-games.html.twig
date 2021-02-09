@@ -17,8 +17,11 @@
             align-content: flex-start;
             align-items: center;
             }
+        .align-text{
+            text-align: center;
+        }
     </style>
-    <form style="margin-top: 10px;" role="search" class="d-flex" method="get" action="{{ path('search') }}">
+    <form style="margin-top: 10px;" role="search" class="d-flex" method="post" action="{{ path('search') }}">
         <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
@@ -28,7 +31,7 @@
                 <img style="width:224px; border-radius: 20px 20px 0px 0px" src="//images.igdb.com/igdb/image/upload/t_cover_big/{{ igdb.getGameCovers(game.getId) }}.jpg" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 style="text-align: center;" class="card-title">{{ game.getName }}</h5>
-                    <p class="card-text text-secondary">{{igdb.getGenres(game.getId)}}, {{ game.getFirstReleaseDate|format_datetime('short', 'none', locale='fr') }}</p>
+                    <p class="card-text text-secondary align-text">{{igdb.getGenres(game.getId)}}</p>
                     <div class="btn-wrapper">
                         <a style="" href="{{ path('show', {'id': game.id}) }}" class="btn btn-primary">Voir</a>
                     </div>

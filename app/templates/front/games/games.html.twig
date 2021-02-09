@@ -20,8 +20,23 @@
         .title-orange{
             color:#FF5D19; 
         }
+        .align-text{
+            text-align: center;
+        }
     </style>
-    <form style="margin-top: 10px;" role="search" class="d-flex" method="get" action="{{ path('search') }}">
+    <form style="margin-top: 10px;" role="search" class="d-flex" method="POST" action="{{ path('search') }}">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="genre" value="Shooter" id="flexRadioDefault1" checked>
+            <label class="form-check-label" for="flexRadioDefault1">
+                Shooter
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="genre" value="Platform" id="flexRadioDefault2" >
+            <label class="form-check-label" for="flexRadioDefault2">
+                Platform
+            </label>
+        </div>
         <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
@@ -32,7 +47,7 @@
                 <img style="width:224px; border-radius: 20px 20px 0px 0px" src="//images.igdb.com/igdb/image/upload/t_cover_big/{{ igdb.getGameCovers(game.getId) }}.jpg" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 style="text-align: center;" class="card-title title-orange">{{ game.getName }}</h5>
-                    <p class="card-text text-secondary">{{igdb.getGenres(game.getId)}}, {{ game.getFirstReleaseDate|format_datetime('short', 'none', locale='fr') }}</p>
+                    <p class="card-text text-secondary align-text">{{igdb.getGenres(game.getId)}}</p>
                     <div class="btn-wrapper">
                         <a style="" href="{{ path('show', {'id': game.id}) }}" class="btn btn-primary">Voir</a>
                     </div>
