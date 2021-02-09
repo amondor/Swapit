@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\lib\IgdbBundle\DTO;
 
 use App\Repository\PlatformRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=PlatformRepository::class)
  */
-class Platform
+class PlatformDTO
 {
     /**
      * @ORM\Id

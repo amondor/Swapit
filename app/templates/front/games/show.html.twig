@@ -1,0 +1,104 @@
+{% extends 'base_front.html.twig' %}
+
+{% block body %}
+
+<style>
+    body{
+        background:#ECECEC;
+    }
+    .box{
+        width: 250px;
+        height: 180px;
+        border-radius: 15px;
+    }
+    .blue{
+        width: 1296px;
+        display: flex;
+        justify-content: space-between;
+        background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
+        backdrop-filter: blur(2px);
+    }
+    .red{
+        background-color: white;
+        width: 600px;
+    }
+    .green{
+        background-color: white;
+        width: 600px;
+    }
+    .flex-container{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-top: 25px;
+    }
+    .top-margin{
+        margin-top: 30px;
+    }
+    .img-big-left{
+        display: flex;
+        height: -webkit-fill-available;
+        align-items: center;
+        margin-left: 25px;
+    }
+    .info-game-content{
+        width: 900px;
+        display: flex;
+        align-items: center;
+    }
+    .date-release{
+        display: flex;
+        align-items: center;
+    }
+    .font-style{
+        color: white; 
+        font-weight: 600;
+    }
+    .cover-game{
+        background-image: url(//images.igdb.com/igdb/image/upload/t_1080p/{{ igdb.getGameCovers(game.getId) }}.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        border-radius: 15px;
+        background-position: 50% 36%;
+    }
+    .title-orange{
+        color:#FF5D19; 
+        font-weight: 700;
+    }
+    shadow-text{
+        color: white; 
+        text-shadow: black 0.1em 0.1em 0.2em;
+    }
+</style>
+
+<div class="flex-container">
+    <div class="cover-game">
+        <div class="box blue">
+            <div class="img-big-left">
+                <img src="//images.igdb.com/igdb/image/upload/t_1080p/{{ igdb.getGameCovers(game.getId) }}.jpg" style="width:125px; height: fit-content; border-radius: 10px;"></img>
+            </div>
+            <div class="info-game-content">
+                <div class="title-game">
+                    <h2 class="title-orange shadow-text">{{game.getName}}</h2>
+                    <div class="desc-game">
+                        <p class="font-style shadow-text">{{game.getSummary|striptags|length > 620 ? game.getSummary|striptags|slice(0, 580) ~ '...' : game.getSummary|striptags }}
+                    </div>
+                </div>
+            </div>
+            <div class="date-release">
+                <div class="info-spec-game">
+                    <p class="font-style">Sortie : {{ game.getFirstReleaseDate|format_datetime('short', 'none', locale='fr') }}</p>
+                    <p class="font-style">Genre : {{igdb.getGenres(game.getId)}}</p>
+                </div>
+            </div>
+            <div class="genre">
+            </div>
+            <div class="rate-game">
+            </div>
+        </div>
+    </div>
+    <div class="box red top-margin"></div>
+    <div class="box green top-margin"></div>
+</div>
+
+{% endblock %}

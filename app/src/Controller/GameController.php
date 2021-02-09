@@ -2,44 +2,93 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\GameRepository;
-use App\Form\GameType;
 use App\Entity\Game;
-
-
-/**
- * Class GameController
- * @Route("/game", name="game_")
- */
+use App\Form\GameType;
+use App\Services\Igdb;
+use App\Repository\GameRepository;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class GameController extends AbstractController
 {
     /**
-     * @Route("/", name="index", methods={"GET"})
+     * @Route("/games", name="games", methods={"GET"})
      */
-    public function index(GameRepository $gameRepository)
+    public function index(GameRepository $gameRepository, Igdb $igdb, Request $request, PaginatorInterface $paginator)
     {
-        return $this->render('game/index.html.twig', [
-            'games' => $gameRepository->findAll()
+        $gameSearched = $gameRepository->findGamePopular();
+
+        $gamesData = $paginator->paginate(
+            $gameSearched,
+            $request->query->getInt('page', 1),
+            10
+        );
+
+        return $this->render('front/games/games.html.twig', [
+            'games' => $gamesData,
+            'igdb' => $igdb
         ]);
     }
 
     /**
+     * @Route("/result", name="search", methods={"GET", "POST"})
+     */
+    public function searchGameAction(Request $request, GameRepository $gameRepository, Igdb $igdb, PaginatorInterface $paginator){
+        $search = $request->query->get('search');
+        $gameSearched = $gameRepository->findGameByName($search.'%');
+
+        $gamesData = $paginator->paginate(
+            $gameSearched,
+            $request->query->getInt('page', 1),
+            15
+        );
+
+        return $this->render('front/games/search-games.html.twig', [
+            'games' => $gamesData,
+            'igdb' => $igdb
+        ]);
+    }
+
+    // FEATURE EN COURS : POUR LE MOMENT C'EST BUGUE
+    // /**
+    //  * @Route("/result", name="search", methods={"GET", "POST"})
+    //  */
+    // public function searchGameFiltered(Request $request, GameRepository $gameRepository, Igdb $igdb, PaginatorInterface $paginator){
+    //     $search['name'] = $request->request->get('search');
+
+    //     if(!empty($request->request->get('genre'))){ $search['genre'] = $request->request->get('genre'); } 
+    //     // (!$request->query->get('genre')) ? : $search['genre'] = $request->request->get('genre');
+
+    //     $gameSearched = $gameRepository->search($search);
+
+    //     $gamesData = $paginator->paginate(
+    //         $gameSearched,
+    //         $request->query->getInt('page', 1),
+    //         15
+    //     );
+
+    //     return $this->render('front/games/search-games.html.twig', [
+    //         'games' => $gamesData,
+    //         'igdb' => $igdb
+    //     ]);
+    // }
+
+    /**
      * @Route("/show/{id}", name="show", methods={"GET"})
      */
-    public function show(Game $game)
+    public function show(Game $game, Igdb $igdb)
     {
-            return $this->render('game/show.html.twig', [
-                'game' => $game
-            ]);
+        return $this->render('front/games/show.html.twig', [
+            'game' => $game,
+            'igdb' => $igdb
+        ]);
     }
 
 
-     /**
+    /**
      * @Route("/new", name="new", methods={"GET", "POST"})
      */
     public function new(Request $request)
@@ -58,7 +107,7 @@ class GameController extends AbstractController
             return $this->redirectToRoute('game_index');
         }
 
-        return $this->render('game/new.html.twig', [
+        return $this->render('games/new.html.twig', [
             'form' => $form->createView()
         ]);
 

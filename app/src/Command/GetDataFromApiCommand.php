@@ -6,13 +6,13 @@
     use Symfony\Component\Console\Input\InputArgument;
     use Symfony\Component\Console\Input\InputInterface;
     use Symfony\Component\Console\Output\OutputInterface;
-    use App\Services\Igdb;
+    use App\IgdbBundle\IgdbWrapper\IgdbWrapper;
 
     class GetDataFromApiCommand extends Command {
 
         private $igdb;
 
-        public function __construct(igdb $igdb)
+        public function __construct(IgdbWrapper $igdb)
         {
             $this->igdb = $igdb;
             parent::__construct();

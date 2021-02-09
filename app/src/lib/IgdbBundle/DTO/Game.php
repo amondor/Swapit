@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Entity;
+namespace App\IgdbBundle\DTO;
 
-use App\Services\Igdb;
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\GameRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Form\FormTypeInterface;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=GameRepository::class)
@@ -95,18 +93,6 @@ class Game
     private $involved_companies;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="OwnGames")
-     * @ORM\JoinTable(name="User_Own_Games")
-     */
-    private $Owners;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="WishGames"),
-     * @ORM\JoinTable(name="User_Wish_Games")
-     */
-    private $Wishers;
-    
-    /*
      * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="games")
      */
     private $genres;
@@ -125,9 +111,6 @@ class Game
     {
         $this->children = new ArrayCollection();
         $this->involved_companies = new ArrayCollection();
-        $this->Owners = new ArrayCollection();
-        $this->Wishers = new ArrayCollection();
-        $this->toto = new ArrayCollection();
         $this->genres = new ArrayCollection();
         $this->modes = new ArrayCollection();
         $this->platforms = new ArrayCollection();
@@ -325,22 +308,6 @@ class Game
     }
 
     /**
-     * @return Collection|User[]
-     */
-    public function getOwners(): Collection
-    {
-        return $this->Owners;
-    }
-
-    public function addOwner(User $owner): self
-    {
-        if (!$this->Owners->contains($owner)) {
-            $this->Owners[] = $owner;
-            $owner->addOwnGame($this);
-        }
-    }
-    
-    /**
      * @return Collection|Genre[]
      */
     public function getGenres(): Collection
@@ -357,14 +324,6 @@ class Game
         return $this;
     }
 
-    public function removeOwner(User $owner): self
-    {
-        if ($this->Owners->contains($owner)) {
-            $this->Owners->removeElement($owner);
-            $owner->removeOwnGame($this);
-        }
-    }
-    
     public function removeGenre(Genre $genre): self
     {
         if ($this->genres->contains($genre)) {
@@ -374,22 +333,6 @@ class Game
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getWishers(): Collection
-    {
-        return $this->Wishers;
-    }
-
-    public function addWisher(User $wisher): self
-    {
-        if (!$this->Wishers->contains($wisher)) {
-            $this->Wishers[] = $wisher;
-            $wisher->addWishGame($this);
-        }
-    }
-        
     /**
      * @return Collection|GameMode[]
      */
@@ -407,14 +350,6 @@ class Game
         return $this;
     }
 
-    public function removeWisher(User $wisher): self
-    {
-        if ($this->Wishers->contains($wisher)) {
-            $this->Wishers->removeElement($wisher);
-            $wisher->removeWishGame($this);
-        }
-    }
-    
     public function removeMode(GameMode $mode): self
     {
         if ($this->modes->contains($mode)) {
@@ -424,22 +359,6 @@ class Game
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getToto(): Collection
-    {
-        return $this->toto;
-    }
-
-    public function addToto(User $toto): self
-    {
-        if (!$this->toto->contains($toto)) {
-            $this->toto[] = $toto;
-            $toto->addToto($this);
-        }
-    }
-    
     /**
      * @return Collection|Platform[]
      */
@@ -457,14 +376,6 @@ class Game
         return $this;
     }
 
-    public function removeToto(User $toto): self
-    {
-        if ($this->toto->contains($toto)) {
-            $this->toto->removeElement($toto);
-            $toto->removeToto($this);
-        }
-    }
-    
     public function removePlatform(Platform $platform): self
     {
         if ($this->platforms->contains($platform)) {

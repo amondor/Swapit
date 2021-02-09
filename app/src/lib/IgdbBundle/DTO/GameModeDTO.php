@@ -1,22 +1,23 @@
 <?php
 
-namespace App\Entity;
+namespace App\lib\IgdbBundle\DTO;
 
-use App\Repository\PlatformRepository;
+use App\Repository\GameModeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=PlatformRepository::class)
+ * @ORM\Entity(repositoryClass=GameModeRepository::class)
  */
-class Platform
+class GameModeDTO
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\Column(type="integer")
+     * @Groups({"cron"})
      */
     private $id;
 
@@ -39,7 +40,7 @@ class Platform
     private $url;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Game::class, mappedBy="platforms")
+     * @ORM\ManyToMany(targetEntity=Game::class, mappedBy="modes")
      */
     private $games;
 
@@ -108,7 +109,7 @@ class Platform
     {
         if (!$this->games->contains($game)) {
             $this->games[] = $game;
-            $game->addPlatform($this);
+            $game->addMode($this);
         }
 
         return $this;
@@ -118,7 +119,7 @@ class Platform
     {
         if ($this->games->contains($game)) {
             $this->games->removeElement($game);
-            $game->removePlatform($this);
+            $game->removeMode($this);
         }
 
         return $this;
