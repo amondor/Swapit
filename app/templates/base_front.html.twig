@@ -44,11 +44,15 @@
                     </li>
                 {% else %}
                     <li class="nav-item">
+                        <p class="nav-link active">Bonjour {{(app.user.username)}}</p>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{{path('userowngameslists')}}">Ownlist</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{{path('userwishgameslists')}}">Wishlist</a>
                     </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="{{path("user_profile")}}"><img style="width:25px; height:25px" src="https://i.ibb.co/pvxsxkc/user.png"></img></a>
                     </li>
