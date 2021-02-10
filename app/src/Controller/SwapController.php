@@ -231,4 +231,14 @@ class SwapController extends AbstractController
 
         return $this->render('swap/swap_denied.html.twig');
     }
+    
+    /**
+     * @Route("/swap_recap/{user}/{game}/{gametoswap}", name="swap_recap")
+     */
+    public function swap_recap($user=null, $game=null, $gametoswap=null)
+    {
+        return $this->render('front/swap/swap_recap.html.twig', [
+            'controller_name' => 'SwapController',
+        ]);
+    }
 }
