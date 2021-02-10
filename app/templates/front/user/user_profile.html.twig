@@ -162,5 +162,51 @@
         </div>
     </div>
 </div>
+<div class="text-wrap-title">
+    <p class="font-style">Demande de swap en attente</p>
+</div>
+<div class="container">
+{% for waitingExchange in waitingExchanges %}
+    <div class="row">
+        <div class="col-sm">
+            <div class="card" style="background-color: #FFD7C5;">
+                <img class="card-img-top" src="//images.igdb.com/igdb/image/upload/t_cover_big/{{ igdb.getGameCovers(waitingExchange.ownerGame.getId) }}.jpg" alt="Card image cap">
+                <div class="card-body d-flex flex-nowrap">
+                    <div class="card-text d-flex flex-wrap">
+                        <h5 style="width: 100%;">{{waitingExchange.ownerGame.getName}}</h5>
+                        <h6 style="width: 100%;">{{igdb.getGenres(waitingExchange.ownerGame.getId)}}</h6>
+                        <h7 style="width: 100%;">{{waitingExchange.ownerGame.getFirstReleaseDate|format_datetime('short', 'none', locale='fr')}}</h7>
+                    </div>
+                    <div class="card-text"><h4>PS5</h4></div>
+                </div>
+            </div>
+            <div style="text-align: center; width: 100%;">
+                <h4 style="margin: 10px;">Ton jeu</h4>
+            </div>
+        </div>
+
+        <div class="col-sm d-flex justify-content-center">
+            <div class="swap-arrow"><img src="https://i.ibb.co/YTd3MGV/swap-arrow.png" alt="swap-arrow.png"></div>
+        </div>
+
+        <div class="col-sm">
+            <div class="card" style="background-color: #FFD7C5;">
+                <img class="card-img-top" src="//images.igdb.com/igdb/image/upload/t_cover_big/{{ igdb.getGameCovers(waitingExchange.game.getId) }}.jpg" alt="Card image cap">
+                <div class="card-body d-flex flex-nowrap">
+                    <div class="card-text d-flex flex-wrap">
+                        <h5 style="width: 100%;">{{ waitingExchange.game.getName}}</h5>
+                        <h6 style="width: 100%;">{{igdb.getGenres(waitingExchange.game.getId)}}</h6>
+                        <h7 style="width: 100%;">{{ waitingExchange.game.getFirstReleaseDate|format_datetime('short', 'none', locale='fr') }}</h7>
+                    </div>
+                    <div class="card-text"><h4>PS5</h4></div>
+                </div>
+            </div>
+            <div style="text-align: center; width: 100%;">
+                <h4 style="margin: 10px;">Jeu de {{waitingExchange.UserProposer.getUsername|capitalize}}</h4>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
 
 {% endblock %}

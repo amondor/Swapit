@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\AddGameToListType;
 use App\Repository\GameRepository;
+use App\Services\Igdb;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -18,11 +19,23 @@ class UserController extends AbstractController
     /**
      * @Route("/user_profile", name="user_profile")
      */
-    public function index()
+    public function index(Igdb $igdb)
     {
         $ownGames = $this->getUser()->getOwnGames();
         $wishGames = $this->getUser()->getWishGames();
         
+        $waitingExchanges = [];
+        $confirmedExchanges = [];
+
+        foreach($this->getUser()->getExchanges() as $exchange){
+            if($exchange->getConfirmed() === true){
+                array_push($confirmedExchanges, $exchange);
+            }
+            elseif($exchange->getConfirmed() === null){
+                array_push($waitingExchanges, $exchange);
+            }
+        }
+
         $arrayWishGames = [];
         $arrayOwnGames = [];
         
@@ -34,12 +47,13 @@ class UserController extends AbstractController
             array_push($arrayWishGames, $wishGame);
         }
 
-        // dd($arrayOwnGames);
-
         return $this->render('front/user/user_profile.html.twig', [
             'controller_name' => 'UserController',
             'ownGames' => $arrayOwnGames,
-            'wishGames' => $arrayWishGames
+            'wishGames' => $arrayWishGames,
+            'confirmedExchanges' => $confirmedExchanges,
+            'waitingExchanges' => $waitingExchanges,
+            'igdb' => $igdb
         ]);
     }
 
