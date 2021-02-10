@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Exchange;
 use App\Entity\Game;
 use App\Entity\User;
+use App\Services\Igdb;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -63,15 +64,17 @@ class SwapController extends AbstractController
     }
 
     /**
-     * @Route("/recap_game/{user}/{selected_game}/{game}/{owner}", name="recap_swap_game")
+     * @Route("/swap_recap/{user}/{selected_game}/{game}/{owner}", name="swap_recap")
      */
-    public function recap_swap_game(User $user, Game $selected_game, Game $game, User $owner){
-        return $this->render('front/swap/recap_swap_game.html.twig', [
+    public function swap_recap(User $user, Game $selected_game, Game $game, User $owner, Igdb $igdb)
+    {
+        return $this->render('front/swap/swap_recap.html.twig', [
             'user' => $user,
             'owner' => $owner,
             'gameSelected' => $selected_game,
             'game' => $game,
-            'currentUser' => $this->getUser()
+            'currentUser' => $this->getUser(),
+            'igdb' => $igdb
         ]);
     }
 
@@ -126,7 +129,7 @@ class SwapController extends AbstractController
                 
         $mailer->send($messageProposerReceiver);
 
-        return $this->redirectToRoute('games');
+        return $this->render('front/swap/swap_request_send.html.twig');
     }
 
     /**
@@ -229,16 +232,8 @@ class SwapController extends AbstractController
                 
         $mailer->send($messageConfirmProposer);
 
-        return $this->render('swap/swap_denied.html.twig');
+        return $this->render('front/swap/swap_denied.html.twig');
     }
+
     
-    /**
-     * @Route("/swap_recap/{user}/{game}/{gametoswap}", name="swap_recap")
-     */
-    public function swap_recap($user=null, $game=null, $gametoswap=null)
-    {
-        return $this->render('front/swap/swap_recap.html.twig', [
-            'controller_name' => 'SwapController',
-        ]);
-    }
 }

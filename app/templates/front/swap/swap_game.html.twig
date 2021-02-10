@@ -37,7 +37,7 @@
             <div class="element-list">
                 <p>{{ matchingGame.getName }}</p>
                 <div class="btn-wrapper-swap">
-                    <a style="" href="{{ path('recap_swap_game', {'user': owner.getId, 'selected_game': matchingGame.getId, 'game': userOwnerGame.getId, 'owner': owner.getId}) }}" class="btn btn-primary">Séléctionner</a>
+                    <a style="" href="{{ path('swap_recap', {'user': owner.getId, 'selected_game': matchingGame.getId, 'game': userOwnerGame.getId, 'owner': owner.getId}) }}" class="btn btn-primary">Séléctionner</a>
                 </div>
             </div>
         {% endfor %}
