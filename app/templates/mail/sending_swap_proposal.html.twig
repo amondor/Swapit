@@ -1,0 +1,10 @@
+<h3>Votre demande de swap a été envoyée !</h3>
+
+Bonjour {{ user.getUsername }} !
+
+Votre demande de swap pour le jeu {{ ownerGame.getName }} en échange de votre jeu {{ selected_game.getName }} a été envoyée à {{owner.getUsername}}.
+
+Vous recevrez un mail lorsque {{owner.getUsername}} vous répondra !
+Merci!
+
+<img src="{{ absolute_url(asset('build/swapit-logo-svg.png')) }}">

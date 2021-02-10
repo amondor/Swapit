@@ -131,18 +131,11 @@
                     <img style="width: 60px;" src="https://i.ibb.co/QPnXBTj/check.png"></img>
                 </div>
             </div>
+            {% for ownGame in ownGames %}
             <div class="element-list-owned">
-                <p>assassins creed</p>
+                <p>{{ ownGame.getName }}</p>
             </div>
-            <div class="element-list-owned">
-                <p>assassins creed</p>
-            </div>
-            <div class="element-list-owned">
-                <p>assassins creed</p>
-            </div>
-            <div class="element-list-owned">
-                <p>assassins creed</p>
-            </div>
+            {% endfor %}
         </div>
         <div class="games-wish-list">
             <div class="title-game-wrapper">
@@ -153,18 +146,11 @@
                     <img style="width: 60px;" src="https://i.ibb.co/Zxv6Jhd/favorite.png"></img>
                 </div>
             </div>
+            {% for wishGame in wishGames %}
             <div class="element-list-wish">
-                <p>assassins creed</p>
+                <p>{{ wishGame.getName }}</p>
             </div>
-            <div class="element-list-wish">
-                <p>assassins creed</p>
-            </div>
-            <div class="element-list-wish">
-                <p>assassins creed</p>
-            </div>
-            <div class="element-list-wish">
-                <p>assassins creed</p>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>

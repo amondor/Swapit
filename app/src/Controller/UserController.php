@@ -20,8 +20,26 @@ class UserController extends AbstractController
      */
     public function index()
     {
+        $ownGames = $this->getUser()->getOwnGames();
+        $wishGames = $this->getUser()->getWishGames();
+        
+        $arrayWishGames = [];
+        $arrayOwnGames = [];
+        
+        foreach ($ownGames as $ownGame) {
+            array_push($arrayOwnGames, $ownGame);
+        }
+
+        foreach ($wishGames as $wishGame) {
+            array_push($arrayWishGames, $wishGame);
+        }
+
+        // dd($arrayOwnGames);
+
         return $this->render('front/user/user_profile.html.twig', [
             'controller_name' => 'UserController',
+            'ownGames' => $arrayOwnGames,
+            'wishGames' => $arrayWishGames
         ]);
     }
 
@@ -110,4 +128,6 @@ class UserController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    
 }

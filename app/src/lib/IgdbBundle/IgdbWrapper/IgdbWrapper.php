@@ -106,7 +106,7 @@ public function getGames($offset, $limit = 500) {
                         ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
                     'body' => 'fields name, first_release_date, status, storyline, summary, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows, genres, involved_companies, game_modes, platforms;
                                 where status = null;
-                                where total_rating != null;
+                                where aggregated_rating >= 50 & total_rating != null;
                                 limit '."$limit;".'
                                 offset '."$offset;",
                     ]
@@ -116,19 +116,47 @@ public function getGames($offset, $limit = 500) {
 
 }
 
-public function getGenres($limit = 30) { 
-    $response = $this->httpClient->request(
+public function getGenres($id) { 
+    $genres = $this->httpClient->request(
                     'POST','https://api.igdb.com/v4/genres',
                     [
                         'headers' => [
                                 'Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token
                             ],
-                        'body' => 'fields name, slug;
-                        limit '."$limit;"
+                        'body' => 'fields name, slug;'
                     ]
                 )->toArray();
 
-    return $response;                              
+    $game = $this->httpClient->request(
+        'POST','https://api.igdb.com/v4/games',
+        [
+            'headers' => [
+                    'Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token
+                ],
+            'body' => 'fields genres;'." where id = $id ;"
+        ]
+    )->toArray();
+
+    $gameArrayUniq = array_reduce($game, 'array_merge', array());
+
+    if(array_key_exists('genres', $gameArrayUniq) == false){
+        return "null";
+    }
+
+    $genreNumber = array_shift($gameArrayUniq['genres']);
+
+    for($i=0; $i<count($genres); $i++){
+        if($genreNumber == $genres[$i]['id']){
+            $gameGenre = $genres[$i]['name'];
+            break;
+        }
+    }
+
+    if(empty($gameGenre)){
+        return 'null';
+    }else{
+        return $gameGenre;
+    }                            
 }
 
 public function getCompanies($offset, $limit = 500) { 
@@ -178,7 +206,7 @@ public function countGames() {
                             ],
                         'body' => 
                             'where status = null;
-                            where total_rating != null;'
+                            where aggregated_rating >= 50 & total_rating != null;'
                             
                     ]
                 )->toArray();
@@ -306,16 +334,21 @@ public function searchGame($search) {
 }
 
 public function getGameCovers($id) { 
-    $response = $this->httpClient->request('POST','https://api.igdb.com/v4/covers',
-                                    [
-                                    'headers' => 
-                                        ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
-                                    'body' => 'fields *;'
-                                            ." where game = $id ;
-                                            limit 1"
-                                    ]
-                                )->toArray(); 
-    return $response;
+    $response = $this->httpClient->request(
+                    'POST','https://api.igdb.com/v4/covers',
+                    [
+                    'headers' => 
+                        ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
+                        'body' => 'fields *; where game = '.$id.';'
+                    ]
+                )->toArray();
+    $new_array = array_reduce($response, 'array_merge', array());
+    if(empty($new_array['image_id'])){
+        return 'nocover_qhhlj6';
+    }
+    else{
+        return $new_array['image_id'];
+    }
 }
 
 public function getThemes() { 

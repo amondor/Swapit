@@ -16,8 +16,7 @@ body {background-color: #ECECEC; }
         height: 80px;
         width: 550px;
         border-radius: 5px;
-        background-color: #FF5D19;
-        opacity: 0.33;
+        background-color: rgba(255, 93, 25, 0.3);
         margin-top: 25px;
     }
     .font-style{
@@ -54,5 +53,8 @@ body {background-color: #ECECEC; }
         width: 1200px;
     }
     .owned-color{
-        background-color: #D4E0E5;
+        background-color: rgba(212, 224, 229, 0.6);
+    }
+    .btn-wrapper-swap{
+        float: right;
     }

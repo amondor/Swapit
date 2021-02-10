@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\IgdbBundle\IgdbWrapper\IgdbWrapper;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use App\Services\Igdb;
 use Symfony\Bridge\PhpUnit\TextUI\Command;
 
 /**

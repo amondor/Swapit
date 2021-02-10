@@ -109,6 +109,16 @@ class Game
      */
     private $platforms;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Exchange::class, mappedBy="game")
+     */
+    private $exchanges;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Exchange::class, mappedBy="ownerGame")
+     */
+    private $targetedExchangesAreReferred;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -119,6 +129,8 @@ class Game
         $this->genres = new ArrayCollection();
         $this->modes = new ArrayCollection();
         $this->platforms = new ArrayCollection();
+        $this->exchanges = new ArrayCollection();
+        $this->targetedExchangesAreReferred = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -283,6 +295,7 @@ class Game
             $this->Owners[] = $owner;
             $owner->addOwnGame($this);
         }
+        return $this;
     }
     
     /**
@@ -308,6 +321,7 @@ class Game
             $this->Owners->removeElement($owner);
             $owner->removeOwnGame($this);
         }
+        return $this;
     }
     
     public function removeGenre(Genre $genre): self
@@ -333,6 +347,8 @@ class Game
             $this->Wishers[] = $wisher;
             $wisher->addWishGame($this);
         }
+
+        return $this;
     }
         
     /**
@@ -358,6 +374,7 @@ class Game
             $this->Wishers->removeElement($wisher);
             $wisher->removeWishGame($this);
         }
+        return $this;
     }
     
     public function removeMode(GameMode $mode): self
@@ -367,22 +384,6 @@ class Game
         }
 
         return $this;
-    }
-
-    /**
-     * @return Collection|User[]
-     */
-    public function getToto(): Collection
-    {
-        return $this->toto;
-    }
-
-    public function addToto(User $toto): self
-    {
-        if (!$this->toto->contains($toto)) {
-            $this->toto[] = $toto;
-            $toto->addToto($this);
-        }
     }
     
     /**
@@ -401,19 +402,71 @@ class Game
 
         return $this;
     }
-
-    public function removeToto(User $toto): self
-    {
-        if ($this->toto->contains($toto)) {
-            $this->toto->removeElement($toto);
-            $toto->removeToto($this);
-        }
-    }
     
     public function removePlatform(Platform $platform): self
     {
         if ($this->platforms->contains($platform)) {
             $this->platforms->removeElement($platform);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Exchange[]
+     */
+    public function getExchanges(): Collection
+    {
+        return $this->exchanges;
+    }
+
+    public function addExchange(Exchange $exchange): self
+    {
+        if (!$this->exchanges->contains($exchange)) {
+            $this->exchanges[] = $exchange;
+            $exchange->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExchange(Exchange $exchange): self
+    {
+        if ($this->exchanges->removeElement($exchange)) {
+            // set the owning side to null (unless already changed)
+            if ($exchange->getGame() === $this) {
+                $exchange->setGame(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Exchange[]
+     */
+    public function getTargetedExchangesAreReferred(): Collection
+    {
+        return $this->targetedExchangesAreReferred;
+    }
+
+    public function addTargetedExchangesAreReferred(Exchange $targetedExchangesAreReferred): self
+    {
+        if (!$this->targetedExchangesAreReferred->contains($targetedExchangesAreReferred)) {
+            $this->targetedExchangesAreReferred[] = $targetedExchangesAreReferred;
+            $targetedExchangesAreReferred->setOwnerGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTargetedExchangesAreReferred(Exchange $targetedExchangesAreReferred): self
+    {
+        if ($this->targetedExchangesAreReferred->removeElement($targetedExchangesAreReferred)) {
+            // set the owning side to null (unless already changed)
+            if ($targetedExchangesAreReferred->getOwnerGame() === $this) {
+                $targetedExchangesAreReferred->setOwnerGame(null);
+            }
         }
 
         return $this;

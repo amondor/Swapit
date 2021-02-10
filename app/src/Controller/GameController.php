@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Game;
 use App\Form\GameType;
-use App\Services\Igdb;
 use App\Repository\GameRepository;
+use App\IgdbBundle\IgdbWrapper\IgdbWrapper;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,7 +17,7 @@ class GameController extends AbstractController
     /**
      * @Route("/games", name="games", methods={"GET"})
      */
-    public function index(GameRepository $gameRepository, Igdb $igdb, Request $request, PaginatorInterface $paginator)
+    public function index(GameRepository $gameRepository, IgdbWrapper $igdb, Request $request, PaginatorInterface $paginator)
     {
         $gameSearched = $gameRepository->findGamePopular();
 
@@ -36,7 +36,7 @@ class GameController extends AbstractController
     /**
      * @Route("/result", name="search", methods={"GET", "POST"})
      */
-    public function searchGameAction(Request $request, GameRepository $gameRepository, Igdb $igdb, PaginatorInterface $paginator){
+    public function searchGameAction(Request $request, GameRepository $gameRepository, IgdbWrapper $igdb, PaginatorInterface $paginator){
         $search = $request->query->get('search');
         $gameSearched = $gameRepository->findGameByName($search.'%');
 
@@ -79,11 +79,19 @@ class GameController extends AbstractController
     /**
      * @Route("/show/{id}", name="show", methods={"GET"})
      */
-    public function show(Game $game, Igdb $igdb)
+    public function show(Game $game, IgdbWrapper $igdb)
     {
+        $owners = $game->getOwners();
+        $arrayOwners = [];
+
+        foreach($owners as $owner){
+            array_push($arrayOwners, $owner);
+        }
+
         return $this->render('front/games/show.html.twig', [
             'game' => $game,
-            'igdb' => $igdb
+            'igdb' => $igdb,
+            'owners' => $arrayOwners
         ]);
     }
 

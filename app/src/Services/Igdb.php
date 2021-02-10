@@ -208,7 +208,6 @@ class Igdb {
                 'body' => 'fields genres;'." where id = $id ;"
             ]
         )->toArray();
-        // dd($game);
 
         $gameArrayUniq = array_reduce($game, 'array_merge', array());
 

@@ -16,7 +16,7 @@
         display: flex;
         justify-content: space-between;
         background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
-        backdrop-filter: blur(2px);
+        backdrop-filter: blur(1.3px);
     }
     .red{
         background-color: white;
@@ -50,9 +50,8 @@
         display: flex;
         align-items: center;
     }
-    .font-style{
+    .font-style-game{
         color: white; 
-        font-weight: 600;
     }
     .cover-game{
         background-image: url(//images.igdb.com/igdb/image/upload/t_1080p/{{ igdb.getGameCovers(game.getId) }}.jpg);
@@ -81,14 +80,14 @@
                 <div class="title-game">
                     <h2 class="title-orange shadow-text">{{game.getName}}</h2>
                     <div class="desc-game">
-                        <p class="font-style shadow-text">{{game.getSummary|striptags|length > 620 ? game.getSummary|striptags|slice(0, 580) ~ '...' : game.getSummary|striptags }}
+                        <p class="font-style-game shadow-text">{{game.getSummary|striptags|length > 620 ? game.getSummary|striptags|slice(0, 580) ~ '...' : game.getSummary|striptags }}
                     </div>
                 </div>
             </div>
             <div class="date-release">
                 <div class="info-spec-game">
-                    <p class="font-style">Sortie : {{ game.getFirstReleaseDate|format_datetime('short', 'none', locale='fr') }}</p>
-                    <p class="font-style">Genre : {{igdb.getGenres(game.getId)}}</p>
+                    <p class="font-style-game">Sortie : {{ game.getFirstReleaseDate|format_datetime('short', 'none', locale='fr') }}</p>
+                    <p class="font-style-game">Genre : {{igdb.getGenres(game.getId)}}</p>
                 </div>
             </div>
             <div class="genre">
@@ -97,7 +96,14 @@
             </div>
         </div>
     </div>
-    <div class="box red top-margin"></div>
+    {% for owner in owners %}
+    <div class="box red top-margin">
+        <p> {{owner.getUsername}} </p>
+        <div class="btn-wrapper">
+            <a style="" href="{{ path('swap_game', {'id': owner.getId, 'id_game': game.getId}) }}" class="btn btn-primary">Swapper</a>
+        </div>
+    </div>
+    {% endfor %}
     <div class="box green top-margin"></div>
 </div>
 

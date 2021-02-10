@@ -1,0 +1,16 @@
+{% extends 'base_front.html.twig' %}
+
+{% block body %}
+
+<title>Proposer un swap</title>
+
+<div class="container" style="display: flex; margin-top: 25px; flex-wrap: wrap; justify-content: center;">
+    <div class="text-wrap-title">
+        <p class="font-style-title">Récapitulatif de Swap</p>
+    </div>
+    <div class="btn-wrapper">
+        <a style="" href="{{ path('validate_swap', {'user': user.getId, 'selected_game': gameSelected.getId, 'ownerGame': game.getId, 'owner': owner.getId} ) }}" class="btn btn-primary">Valider</a>
+    </div>
+</div>
+
+{% endblock %}

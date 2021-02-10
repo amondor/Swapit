@@ -6,12 +6,12 @@
 
 <div class="container" style="display: flex; margin-top: 25px; flex-wrap: wrap; justify-content: center;">
     <div class="text-wrap-title">
-        <p class="font-style-title">Proposer un Swap à Pseudo</p>
+        <p class="font-style-title">Proposer un Swap à {{ owner.getUsername|capitalize }}</p>
     </div>
     <div class="box left-box">
         <div class="wrapper-header">
             <div class="text-wrap">
-                <p class="font-style">Jeux possédés par Pseudo</p>
+                <p class="font-style">Jeu à Swapper</p>
             </div>
             <div class="vector-wrap">
                 <img style="width: 60px;" src="https://i.ibb.co/QPnXBTj/check.png"></img>
@@ -19,42 +19,37 @@
         </div>
         <div class="list-elements-container">
             <div class="element-list owned-color">
-                <p>assassins creed</p>
-            </div>
-            <div class="element-list owned-color">
-                <p>assassins creed</p>
-            </div>
-            <div class="element-list owned-color">
-                <p>assassins creed</p>
-            </div>
-            <div class="element-list owned-color">
-                <p>assassins creed</p>
+                <p>{{ userOwnerGame.getName }}</p>
             </div>
         </div>
     </div> 
     <div class="box right-box"> 
         <div class="wrapper-header">
             <div class="text-wrap">
-                <p class="font-style">Les jeux que tu souhaites</p>
+                <p class="font-style">Les jeux que {{ owner.getUsername|capitalize }} souhaites</p>
             </div>
             <div class="vector-wrap">
                 <img style="width: 60px;" src="https://i.ibb.co/Zxv6Jhd/favorite.png"></img>
             </div>
         </div>
         <div class="list-elements-container">
+        {% for matchingGame in matchingGames %} 
             <div class="element-list">
-                <p>assassins creed</p>
+                <p>{{ matchingGame.getName }}</p>
+                <div class="btn-wrapper-swap">
+                    <a style="" href="{{ path('recap_swap_game', {'user': owner.getId, 'selected_game': matchingGame.getId, 'game': userOwnerGame.getId, 'owner': owner.getId}) }}" class="btn btn-primary">Séléctionner</a>
+                </div>
             </div>
-            <div class="element-list">
-                <p>assassins creed</p>
-            </div>
-            <div class="element-list">
-                <p>assassins creed</p>
-            </div>
-            <div class="element-list">
-                <p>assassins creed</p>
+        {% endfor %}
+        </div>
+        
+        {% for unmatchingGame in unmatchingGames %}
+        <div class="list-elements-container">
+            <div class="element-list owned-color">
+                <p>{{ unmatchingGame.getName }}</p>
             </div>
         </div>
+        {% endfor %}
     </div> 
 </div>
 

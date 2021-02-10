@@ -1,0 +1,19 @@
+<style>
+    .btn-wrapper{ display: flex; justify-content: center; align-items: center; }
+</style>
+
+<h3>Vous avez reçu une demande de swap !</h3>
+
+Bonjour {{ owner.getUsername }} !
+
+{{ user.getUsername }} veux swapper un de vos jeux !
+
+Vous avez reçu une demande de swap pour votre jeu {{ ownerGame.getName }} en échange de son jeu {{ selected_game.getName }}.
+
+Pour confirmer le swap, cliquez ici: <div class="btn-wrapper"><a href="{{  url('exchange_confirmed', {'exchange': exchange.getId}) }}"> Go Swap ! </a></div>
+</br>
+Pour refuser le swap, cliquez ici: <div class="btn-wrapper"><a href="{{ url('exchange_denied', {'exchange': exchange.getId}) }}"> Refuser ! </a></div>.
+
+Merci!
+
+<img src="{{ absolute_url(asset('build/swapit-logo-svg.png')) }}">
